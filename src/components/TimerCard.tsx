@@ -79,7 +79,7 @@ export function TimerCard() {
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
-    <div className="glass glow animate-fade-in">
+    <div className="glass animate-fade-in">
       <div className="p-8">
         <div className="text-center mb-6">
           <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900">
@@ -95,8 +95,8 @@ export function TimerCard() {
           )}
         </div>
 
-        <div className="relative w-72 h-72 mx-auto mb-8">
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 260 260">
+        <div className="relative w-80 h-80 sm:w-96 sm:h-96 mx-auto mb-8 p-6">
+          <svg className="w-full h-full -rotate-90" viewBox="0 0 260 260" style={{overflow: 'visible'}}>
             <circle
               cx="130" cy="130" r="120"
               fill="none"

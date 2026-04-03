@@ -25,8 +25,8 @@ export function KanbanBoard() {
   }
 
   return (
-    <div className="glass glow animate-fade-in">
-      <div className="p-6">
+    <div className="glass glow animate-fade-in h-full">
+      <div className="p-6 flex flex-col h-full">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 inline-flex items-center gap-2">
             <IconClipboardList size={20} className="text-neutral-500 dark:text-neutral-400" />
@@ -50,7 +50,7 @@ export function KanbanBoard() {
           </button>
         </form>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1 content-start">
           {columns.map((col) => {
             const columnTasks = tasks.filter((t) => t.status === col.key)
             return (

@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { IconMoon, IconSun, IconChartBar, IconSettings, IconLanguage } from '@tabler/icons-react'
+import { IconMoon, IconSun, IconChartBar, IconSettings, IconLanguage, IconBook } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { SettingsPanel } from './SettingsPanel'
 import { SessionHistory } from './SessionHistory'
+import { GuideModal } from './GuideModal'
 import { Logo } from './Logo'
 
 export function Header() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(false)
   const { darkMode, toggleDarkMode, language, setLanguage } = useAppStore()
 
   const toggleLang = () => {
@@ -16,12 +18,19 @@ export function Header() {
 
   return (
     <>
-      <header className="w-full py-4 px-6 animate-slide-down">
-        <div className="container mx-auto max-w-5xl flex items-center justify-between">
+      <header className="w-full py-4 px-8 animate-slide-down">
+        <div className="container mx-auto max-w-7xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Logo />
           </div>
           <div className="flex gap-2">
+            <button
+              onClick={() => setGuideOpen(true)}
+              className="btn-secondary"
+              title={language === 'es' ? 'Guía de Uso' : 'User Guide'}
+            >
+              <IconBook size={18} />
+            </button>
             <button
               onClick={toggleLang}
               className="btn-secondary"
@@ -56,6 +65,7 @@ export function Header() {
       </header>
       {settingsOpen && <SettingsPanel onClose={() => setSettingsOpen(false)} />}
       {historyOpen && <SessionHistory onClose={() => setHistoryOpen(false)} />}
+      {guideOpen && <GuideModal onClose={() => setGuideOpen(false)} />}
     </>
   )
 }

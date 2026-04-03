@@ -14,8 +14,8 @@ function App() {
   ]
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-4xl space-y-6">
-      <div className="flex justify-center gap-2 animate-slide-down">
+    <div className="container mx-auto px-8 py-6 max-w-7xl flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] space-y-6">
+      <div className="flex justify-center gap-2 animate-slide-down w-full">
         {modes.map((mode) => {
           const isActive = timerMode === mode.key
           return (
@@ -34,8 +34,16 @@ function App() {
         })}
       </div>
 
-      <TimerCard />
-      <KanbanBoard />
+      <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+        <div className="flex-1 min-w-0 order-2 lg:order-1">
+          <div className="h-full">
+            <KanbanBoard />
+          </div>
+        </div>
+        <div className="flex-shrink-0 lg:w-[420px] order-1 lg:order-2">
+          <TimerCard />
+        </div>
+      </div>
     </div>
   )
 }
