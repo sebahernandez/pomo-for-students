@@ -1,6 +1,6 @@
-# Pomo Study
+# Pomodoro For Students
 
-> Pomodoro for students — Focus better, one pomodoro at a time.
+> Focus better, one pomodoro at a time.
 
 A modern, minimal Pomodoro timer application with task management, session tracking, and multilingual support (English / Spanish).
 
