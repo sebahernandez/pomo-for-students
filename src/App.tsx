@@ -14,7 +14,7 @@ function App() {
   ]
 
   return (
-    <div className="container mx-auto px-8 py-6 max-w-7xl flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] space-y-6">
+    <div className="container mx-auto max-w-7xl py-6 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] space-y-6">
       <div className="flex justify-center gap-2 animate-slide-down w-full">
         {modes.map((mode) => {
           const isActive = timerMode === mode.key
