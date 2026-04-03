@@ -1,73 +1,142 @@
-# React + TypeScript + Vite
+# Pomo Study
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Pomodoro for students — Focus better, one pomodoro at a time.
 
-Currently, two official plugins are available:
+A modern, minimal Pomodoro timer application with task management, session tracking, and multilingual support (English / Spanish).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Tech Stack](https://img.shields.io/badge/React-19-61dafb?style=flat&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06b6d4?style=flat&logo=tailwindcss)
+![Zustand](https://img.shields.io/badge/Zustand-5-f97316?style=flat)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Timer
+- **Focus sessions** with configurable durations (work, short break, long break)
+- **Circular progress ring** with smooth animations
+- **Audio notification** (triple beep) when a session completes
+- **Auto-transition** between work and break modes
 
-## Expanding the ESLint configuration
+### Task Board (Kanban)
+- **Three columns**: To Do, In Progress, Done
+- **Add, move, and remove** tasks with a single click
+- **Set active task** to track which pomodoros belong to each task
+- **Persistent storage** — tasks survive page reloads via localStorage
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Session History
+- **Track all completed sessions** with timestamp and duration
+- **Stats dashboard** showing total sessions and focus time
+- **Linked to tasks** — see which task each pomodoro was spent on
+- **Clear history** option
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Settings
+- **Customize durations** for focus, short break, and long break
+- **Dark / Light mode** toggle with smooth transitions
+- **Language switcher** — English and Spanish (EN / ES)
+- All settings **persisted in localStorage**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Design
+- **Monochrome palette** — grayscale tones for a clean, professional look
+- **Glassmorphism** panels with backdrop blur
+- **Responsive layout** — works on mobile and desktop
+- **Smooth animations** — fade-in, slide-down transitions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+| Category | Technology |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build tool | Vite 8 |
+| Styling | Tailwind CSS 4 |
+| State management | Zustand |
+| Icons | Tabler Icons |
+| Persistence | localStorage |
+| Audio | Web Audio API |
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ 
+- **npm** (or pnpm / yarn)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/sebahernandez/pomo-for-students.git
+cd pomo-for-students
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app will be available at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint
+npm run lint
 ```
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Card.tsx           # Task card component
+│   ├── Footer.tsx         # App footer
+│   ├── Header.tsx         # App header with controls
+│   ├── KanbanBoard.tsx    # Task board with columns
+│   ├── Logo.tsx           # Brand logo
+│   ├── SessionHistory.tsx # Session history modal
+│   ├── SettingsPanel.tsx  # Settings modal
+│   └── TimerCard.tsx      # Pomodoro timer with progress ring
+├── context/
+│   └── AppContext.tsx     # Zustand store (state + actions)
+├── i18n/
+│   └── translations.ts    # EN/ES translations
+├── App.tsx                # Main layout
+├── main.tsx               # Entry point
+└── index.css              # Global styles + design tokens
+```
+
+## Usage
+
+1. **Start a focus session** — Click the timer mode (Focus / Short Break / Long Break), then press **Start**
+2. **Add tasks** — Type a task name in the input field and click **Add**
+3. **Focus on a task** — Click the **◎ Focus** button on any task card, or select it from the dropdown in the timer
+4. **Move tasks** — Use the action buttons on each card to progress through columns
+5. **View history** — Click the chart icon in the header to see completed sessions
+6. **Customize** — Click the gear icon to adjust durations
+7. **Switch language** — Click the language button (EN/ES) in the header
+8. **Toggle dark mode** — Click the moon/sun icon
+
+## Keyboard Shortcuts
+
+| Action | Shortcut |
+|---|---|
+| Start / Pause | Space (when timer is focused) |
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT — See [LICENSE](LICENSE) for details.
