@@ -15,7 +15,6 @@ export function TimerCard() {
     pauseTimer,
     resetTimer,
     setTimerMode,
-    setActiveTask,
     language,
   } = useAppStore()
 
@@ -128,22 +127,6 @@ export function TimerCard() {
             {t.sessionsCompleted(sessionsCompleted)}
           </span>
         </div>
-
-        {timerMode === 'work' && (
-          <div className="mb-6">
-            <label className="text-xs text-neutral-400 dark:text-neutral-500 mb-2 block text-center">{t.focusOnTask}</label>
-            <select
-              value={activeTaskId ?? ''}
-              onChange={(e) => setActiveTask(e.target.value || null)}
-              className="input-glass text-center"
-            >
-              <option value="">{t.noTaskSelected}</option>
-              {tasks.filter((t) => t.status !== 'done').map((task) => (
-                <option key={task.id} value={task.id}>{task.title}</option>
-              ))}
-            </select>
-          </div>
-        )}
 
         <div className="flex items-center justify-center gap-3">
           {timerStatus !== 'running' && (
