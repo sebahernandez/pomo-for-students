@@ -25,21 +25,28 @@ export function TimerCard() {
 
     if (timeLeft === 0) {
       const ctx = new AudioContext()
-      const playBeep = (delay: number) => {
+
+      const playTone = (freq: number, startTime: number, duration: number, vol: number) => {
         const osc = ctx.createOscillator()
         const gain = ctx.createGain()
         osc.connect(gain)
         gain.connect(ctx.destination)
-        osc.frequency.value = 800
         osc.type = 'sine'
-        gain.gain.setValueAtTime(0.3, ctx.currentTime + delay)
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.5)
-        osc.start(ctx.currentTime + delay)
-        osc.stop(ctx.currentTime + delay + 0.5)
+        osc.frequency.setValueAtTime(freq, startTime)
+        gain.gain.setValueAtTime(0, startTime)
+        gain.gain.linearRampToValueAtTime(vol, startTime + 0.02)
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration)
+        osc.start(startTime)
+        osc.stop(startTime + duration)
       }
-      playBeep(0)
-      playBeep(0.3)
-      playBeep(0.6)
+
+      const now = ctx.currentTime
+      playTone(523.25, now, 0.4, 0.4)
+      playTone(659.25, now + 0.15, 0.4, 0.4)
+      playTone(783.99, now + 0.3, 0.4, 0.4)
+      playTone(1046.5, now + 0.5, 0.6, 0.35)
+      playTone(783.99, now + 1.2, 0.4, 0.3)
+      playTone(1046.5, now + 1.4, 0.8, 0.35)
 
       if (timerMode === 'work') {
         useAppStore.getState().incrementSessions()
