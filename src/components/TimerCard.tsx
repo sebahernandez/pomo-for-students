@@ -73,8 +73,8 @@ export function TimerCard() {
 
   const activeTask = tasks.find((t) => t.id === activeTaskId)
   const settings = useAppStore.getState().settings
-  const totalSeconds = activeTask?.timeLeft !== null && activeTask?.timeLeft !== undefined
-    ? (settings.work * 60)
+  const totalSeconds = activeTask?.focusTime
+    ? activeTask.focusTime * 60
     : settings[timerMode] * 60
   const progress = ((totalSeconds - timeLeft) / totalSeconds) * 100
 

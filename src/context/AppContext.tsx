@@ -12,6 +12,7 @@ export interface Task {
   pomodorosCompleted: number
   createdAt: number
   timeLeft: number | null
+  focusTime: number | null
 }
 
 export interface SessionRecord {
@@ -55,6 +56,7 @@ interface AppState {
   clearHistory: () => void
   toggleDarkMode: () => void
   setLanguage: (lang: Language) => void
+  setTaskFocusTime: (id: string, focusTime: number | null) => void
 
   addTask: (title: string) => void
   removeTask: (id: string) => void
@@ -196,7 +198,14 @@ export const useAppStore = create<AppState>((set) => {
       }
       const targetTask = tasks.find((t) => t.id === id)
       const d = getDurations(state.settings)
-      const newTimeLeft = targetTask?.timeLeft ?? d.work
+      let newTimeLeft: number
+      if (targetTask?.timeLeft !== null && targetTask?.timeLeft !== undefined) {
+        newTimeLeft = targetTask.timeLeft
+      } else if (targetTask?.focusTime) {
+        newTimeLeft = targetTask.focusTime * 60
+      } else {
+        newTimeLeft = d.work
+      }
       return { activeTaskId: id, timeLeft: newTimeLeft, timerStatus: 'idle', tasks }
     }),
 
@@ -230,6 +239,7 @@ export const useAppStore = create<AppState>((set) => {
         pomodorosCompleted: 0,
         createdAt: Date.now(),
         timeLeft: null,
+        focusTime: null,
       }
       const tasks = [...state.tasks, newTask]
       saveTasks(tasks)
@@ -273,6 +283,15 @@ export const useAppStore = create<AppState>((set) => {
     set(() => {
       localStorage.setItem('pomo-lang', lang)
       return { language: lang }
+    }),
+
+  setTaskFocusTime: (id, focusTime) =>
+    set((state) => {
+      const tasks = state.tasks.map((t) =>
+        t.id === id ? { ...t, focusTime } : t
+      )
+      saveTasks(tasks)
+      return { tasks }
     }),
   }
 })
