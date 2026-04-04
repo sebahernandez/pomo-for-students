@@ -77,11 +77,12 @@ export function Card({ task }: CardProps) {
   const remainingTime = isActive && task.timeLeft !== null ? formatTime(task.timeLeft) : null
 
   return (
-    <div className={`group rounded-lg transition-all duration-200 ${
-      isActive
-        ? 'bg-neutral-900/[0.12] dark:bg-white/[0.14] border-2 border-neutral-900/30 dark:border-white/30 shadow-lg shadow-neutral-900/10 dark:shadow-white/10'
-        : 'bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] hover:bg-black/[0.05] dark:hover:bg-white/[0.05]'
-    }`}>
+      <div className={`group rounded-lg transition-all duration-200 cursor-pointer ${
+        isActive
+          ? 'bg-neutral-900/[0.12] dark:bg-white/[0.14] border-2 border-neutral-900/30 dark:border-white/30 shadow-lg shadow-neutral-900/10 dark:shadow-white/10'
+          : 'bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] hover:bg-black/[0.05] dark:hover:bg-white/[0.05]'
+      }`}
+      onClick={() => { if (task.status === 'doing') switchActiveTask(task.id); }}>
       <div className="p-2.5">
         {/* Header: icon + title + delete */}
         <div className="flex items-start gap-2">
