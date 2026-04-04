@@ -100,7 +100,7 @@ export function TimerCard() {
   const totalSeconds = activeTask?.focusTime
     ? activeTask.focusTime * 60
     : settings[timerMode] * 60
-  const progress = ((totalSeconds - timeLeft) / totalSeconds) * 100
+  const progress = timerStatus === 'idle' ? 0 : ((totalSeconds - timeLeft) / totalSeconds) * 100
 
   const circumference = 2 * Math.PI * 120
   const strokeDashoffset = circumference - (progress / 100) * circumference
