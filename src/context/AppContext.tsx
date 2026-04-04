@@ -129,6 +129,11 @@ export const useAppStore = create<AppState>((set) => {
   setTimerMode: (mode) =>
     set((state) => {
       const d = getDurations(state.settings)
+      if (typeof window !== 'undefined') {
+        document.documentElement.classList.remove('mode-shortBreak', 'mode-longBreak')
+        if (mode === 'shortBreak') document.documentElement.classList.add('mode-shortBreak')
+        if (mode === 'longBreak') document.documentElement.classList.add('mode-longBreak')
+      }
       return { timerMode: mode, timeLeft: d[mode], timerStatus: 'idle' }
     }),
 

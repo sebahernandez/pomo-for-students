@@ -1,4 +1,4 @@
-import { IconX, IconBook, IconClock, IconCircleHalf, IconCheck, IconTarget, IconPlayerPlay, IconRotate } from '@tabler/icons-react'
+import { IconX, IconBook, IconClock, IconCircleHalf, IconCheck, IconTarget, IconPlayerPlay, IconArrowsMove, IconSettings, IconChartBar } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
 
@@ -12,18 +12,22 @@ export function GuideModal({ onClose }: GuideModalProps) {
 
   const steps = language === 'es' ? [
     { icon: <IconClock size={20} />, title: 'Elige tu modo', desc: 'Selecciona Enfoque, Descanso Corto o Descanso Largo según lo que necesites.' },
-    { icon: <IconTarget size={20} />, title: 'Selecciona una tarea', desc: 'En el tablero de tareas, haz clic en ◎ Focus en la tarea que quieres trabajar.' },
-    { icon: <IconPlayerPlay size={20} />, title: 'Inicia el temporizador', desc: 'Presiona Iniciar y concéntrate. Cuando termine, escucharás un sonido.' },
-    { icon: <IconCircleHalf size={20} />, title: 'Toma un descanso', desc: 'Al completar un pomodoro, el temporizador cambia automáticamente a descanso corto.' },
-    { icon: <IconRotate size={20} />, title: 'Reinicia si es necesario', desc: 'Puedes reiniciar el temporizador en cualquier momento con el botón Reiniciar.' },
-    { icon: <IconCheck size={20} />, title: 'Mueve tus tareas', desc: 'Avanza tus tareas por las columnas: Por Hacer → En Progreso → Hecho.' },
+    { icon: <IconArrowsMove size={20} />, title: 'Agrega y organiza tareas', desc: 'Escribe una tarea y presiona Agregar. Arrastra las tarjetas entre columnas para cambiar su estado.' },
+    { icon: <IconCircleHalf size={20} />, title: 'Mueve a "En Progreso"', desc: 'Arrastra una tarea a la columna "En Progreso" o usa el botón Iniciar en la tarjeta.' },
+    { icon: <IconTarget size={20} />, title: 'Enfócate en una tarea', desc: 'En una tarea "En Progreso", presiona ◎ Enfoque para activarla e iniciar el pomodoro.' },
+    { icon: <IconPlayerPlay size={20} />, title: 'Controla el temporizador', desc: 'El botón cambia a Pausar/Iniciar según el estado. Presiona Reiniciar para volver a empezar.' },
+    { icon: <IconCheck size={20} />, title: 'Completa tus tareas', desc: 'Arrastra a "Hecho" o usa el botón Hecho. La tarea activa se desactiva automáticamente.' },
+    { icon: <IconChartBar size={20} />, title: 'Revisa tu historial', desc: 'Haz clic en el ícono de gráfico para ver todas tus sesiones completadas con estadísticas.' },
+    { icon: <IconSettings size={20} />, title: 'Personaliza la app', desc: 'Ajusta las duraciones, cambia el idioma (EN/ES) y alterna entre modo claro y oscuro.' },
   ] : [
     { icon: <IconClock size={20} />, title: 'Choose your mode', desc: 'Select Focus, Short Break, or Long Break depending on what you need.' },
-    { icon: <IconTarget size={20} />, title: 'Select a task', desc: 'On the task board, click ◎ Focus on the task you want to work on.' },
-    { icon: <IconPlayerPlay size={20} />, title: 'Start the timer', desc: 'Press Start and focus. When it ends, you\'ll hear a chime sound.' },
-    { icon: <IconCircleHalf size={20} />, title: 'Take a break', desc: 'After completing a pomodoro, the timer automatically switches to a short break.' },
-    { icon: <IconRotate size={20} />, title: 'Reset if needed', desc: 'You can reset the timer at any time with the Reset button.' },
-    { icon: <IconCheck size={20} />, title: 'Move your tasks', desc: 'Progress your tasks through columns: To Do → In Progress → Done.' },
+    { icon: <IconArrowsMove size={20} />, title: 'Add and organize tasks', desc: 'Type a task and click Add. Drag cards between columns to change their status.' },
+    { icon: <IconCircleHalf size={20} />, title: 'Move to "In Progress"', desc: 'Drag a task to the "In Progress" column or use the Start button on the card.' },
+    { icon: <IconTarget size={20} />, title: 'Focus on a task', desc: 'On an "In Progress" task, click ◎ Focus to activate it and start the pomodoro.' },
+    { icon: <IconPlayerPlay size={20} />, title: 'Control the timer', desc: 'The button toggles between Pause/Start based on state. Press Reset to start over.' },
+    { icon: <IconCheck size={20} />, title: 'Complete your tasks', desc: 'Drag to "Done" or use the Done button. The active task is automatically deactivated.' },
+    { icon: <IconChartBar size={20} />, title: 'Review your history', desc: 'Click the chart icon to see all completed sessions with statistics.' },
+    { icon: <IconSettings size={20} />, title: 'Customize the app', desc: 'Adjust durations, switch language (EN/ES), and toggle between light and dark mode.' },
   ]
 
   return (
@@ -56,7 +60,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
 
           <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
             <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
-              <span>{language === 'es' ? 'Tip: Presiona Iniciar y concéntrate en una tarea a la vez.' : 'Tip: Press Start and focus on one task at a time.'}</span>
+              <span>{language === 'es' ? 'Tip: Arrastra tareas entre columnas para organizar tu flujo de trabajo.' : 'Tip: Drag tasks between columns to organize your workflow.'}</span>
               <button onClick={onClose} className="btn-primary">
                 {t.close}
               </button>

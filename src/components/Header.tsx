@@ -19,7 +19,7 @@ export function Header() {
   return (
     <>
       <header className="w-full py-4 animate-slide-down">
-        <div className="container mx-auto max-w-7xl flex items-center justify-between px-8">
+        <div className="max-w-7xl mx-auto px-2 lg:px-0 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Logo />
           </div>

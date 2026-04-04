@@ -34,13 +34,13 @@ function App() {
         })}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 items-stretch">
-        <div className="flex-1 min-w-0 order-2 lg:order-1">
+      <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">
+        <div className="order-2 lg:order-1 lg:flex-1">
           <div className="h-full">
             <KanbanBoard />
           </div>
         </div>
-        <div className="flex-shrink-0 lg:w-[420px] order-1 lg:order-2">
+        <div className="order-1 lg:order-2 lg:w-[420px] lg:flex-[0_0_420px]">
           <TimerCard />
         </div>
       </div>

@@ -5,7 +5,7 @@ const VERSION = '1.0.0'
 export function Footer() {
   return (
     <footer className="w-full border-t border-neutral-200 dark:border-neutral-800">
-      <div className="container mx-auto max-w-7xl px-8 py-6">
+      <div className="max-w-7xl mx-auto px-2 lg:px-0 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-neutral-400 dark:text-neutral-500">
