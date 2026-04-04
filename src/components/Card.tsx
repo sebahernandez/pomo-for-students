@@ -54,6 +54,9 @@ export function Card({ task }: CardProps) {
     const val = parseInt(focusInput, 10)
     if (val > 0 && val <= 120) {
       setTaskFocusTime(task.id, val)
+      if (isActive) {
+        useAppStore.setState({ timeLeft: val * 60, timerStatus: 'idle' })
+      }
     }
     setShowFocusInput(false)
   }
