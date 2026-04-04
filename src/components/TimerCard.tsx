@@ -151,7 +151,7 @@ export function TimerCard() {
         </div>
 
         <div className="flex items-center justify-center gap-3">
-          {timerStatus !== 'running' && (
+          {timerStatus === 'idle' && (
             <button onClick={startTimer} className="btn-success inline-flex items-center gap-1.5">
               <IconPlayerPlay size={16} /> {t.start}
             </button>
