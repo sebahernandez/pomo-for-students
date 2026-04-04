@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { IconPlayerPlay, IconPlayerPause, IconRotate, IconTarget, IconClock } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
+import { playCompletionSound } from '../lib/audio'
 
 export function TimerCard() {
   const {
@@ -19,10 +20,28 @@ export function TimerCard() {
     language,
   } = useAppStore()
 
+
   const t = useTranslations(language)
   const [isEditing, setIsEditing] = useState(false)
   const [editMinutes, setEditMinutes] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+
+  const minutes = Math.floor(timeLeft / 60)
+  const seconds = timeLeft % 60
+  const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+
+  const modeLabel = timerMode === 'work' ? t.focusTime : timerMode === 'shortBreak' ? t.shortBreakLabel : t.longBreakLabel
+
+  const activeTask = tasks.find((t) => t.id === activeTaskId)
+  const settings = useAppStore.getState().settings
+  const totalSeconds = activeTask?.focusTime
+    ? activeTask.focusTime * 60
+    : settings[timerMode] * 60
+  const progress = timerStatus === 'idle' ? 0 : ((totalSeconds - timeLeft) / totalSeconds) * 100
+
+  const circumference = 2 * Math.PI * 120
+  const strokeDashoffset = circumference - (progress / 100) * circumference
 
   const handleTimeClick = () => {
     if (timerStatus !== 'idle') return
@@ -48,29 +67,7 @@ export function TimerCard() {
     if (timerStatus !== 'running') return
 
     if (timeLeft === 0) {
-      const ctx = new AudioContext()
-
-      const playTone = (freq: number, startTime: number, duration: number, vol: number) => {
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.type = 'sine'
-        osc.frequency.setValueAtTime(freq, startTime)
-        gain.gain.setValueAtTime(0, startTime)
-        gain.gain.linearRampToValueAtTime(vol, startTime + 0.02)
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration)
-        osc.start(startTime)
-        osc.stop(startTime + duration)
-      }
-
-      const now = ctx.currentTime
-      playTone(523.25, now, 0.4, 0.4)
-      playTone(659.25, now + 0.15, 0.4, 0.4)
-      playTone(783.99, now + 0.3, 0.4, 0.4)
-      playTone(1046.5, now + 0.5, 0.6, 0.35)
-      playTone(783.99, now + 1.2, 0.4, 0.3)
-      playTone(1046.5, now + 1.4, 0.8, 0.35)
+       playCompletionSound() 
 
       if (timerMode === 'work') {
         useAppStore.getState().incrementSessions()
@@ -89,21 +86,6 @@ export function TimerCard() {
     return () => clearInterval(id)
   }, [timerStatus, timeLeft, timerMode, setTimerMode])
 
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
-  const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-
-  const modeLabel = timerMode === 'work' ? t.focusTime : timerMode === 'shortBreak' ? t.shortBreakLabel : t.longBreakLabel
-
-  const activeTask = tasks.find((t) => t.id === activeTaskId)
-  const settings = useAppStore.getState().settings
-  const totalSeconds = activeTask?.focusTime
-    ? activeTask.focusTime * 60
-    : settings[timerMode] * 60
-  const progress = timerStatus === 'idle' ? 0 : ((totalSeconds - timeLeft) / totalSeconds) * 100
-
-  const circumference = 2 * Math.PI * 120
-  const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
     <div className="glass animate-fade-in">
