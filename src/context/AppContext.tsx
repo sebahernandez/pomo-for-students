@@ -129,7 +129,7 @@ export const useAppStore = create<AppState>((set) => {
   tasks: loadTasks(),
   sessionHistory: loadHistory(),
   darkMode: typeof window !== 'undefined' ? localStorage.getItem('pomo-dark') !== 'false' : true,
-  language: (typeof window !== 'undefined' && (localStorage.getItem('pomo-lang') as Language)) || 'en',
+  language: (typeof window !== 'undefined' && (localStorage.getItem('pomo-lang') as Language)) || 'es',
 
   setTimerMode: (mode) =>
     set((state) => {
