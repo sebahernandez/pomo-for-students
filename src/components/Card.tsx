@@ -143,7 +143,7 @@ export function Card({ task }: CardProps) {
                 isRunning ? (
                   <><IconPlayerPause size={11} /> {t.pause}</>
                 ) : (
-                  <><IconPlayerPlay size={11} /> {t.start}</>
+                  <><IconPlayerPlay size={11} /> {t.resume}</>
                 )
               ) : (
                 <><IconTarget size={11} /> {t.focusAction}</>

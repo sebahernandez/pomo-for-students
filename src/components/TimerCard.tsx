@@ -161,6 +161,11 @@ export function TimerCard() {
               <IconPlayerPause size={16} /> {t.pause}
             </button>
           )}
+          {timerStatus === 'paused' && (
+            <button onClick={startTimer} className="btn-success inline-flex items-center gap-1.5">
+              <IconPlayerPlay size={16} /> {t.resume}
+            </button>
+          )}
           <button onClick={resetTimer} className="btn-danger inline-flex items-center gap-1.5">
             <IconRotate size={16} /> {t.reset}
           </button>
