@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IconX, IconFlame, IconTarget, IconCircleDashed, IconCircleCheck, IconPlayerPlay, IconPlayerPause, IconClock } from '@tabler/icons-react'
 import { useAppStore, type Task, type TaskStatus } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
@@ -37,6 +37,10 @@ export function Card({ task }: CardProps) {
   const [showFocusInput, setShowFocusInput] = useState(false)
   const [focusInput, setFocusInput] = useState(task.focusTime?.toString() ?? '')
 
+  useEffect(() => {
+    setFocusInput(task.focusTime?.toString() ?? '')
+  }, [task.focusTime])
+
   const handleToggleFocus = () => {
     if (isActive) {
       if (isRunning) {
@@ -55,7 +59,7 @@ export function Card({ task }: CardProps) {
     if (val > 0 && val <= 120) {
       setTaskFocusTime(task.id, val)
       if (isActive) {
-        useAppStore.setState({ timeLeft: val * 60, timerStatus: 'idle' })
+        useAppStore.setState({ timeLeft: val * 60 })
       }
     }
     setShowFocusInput(false)
@@ -114,7 +118,7 @@ export function Card({ task }: CardProps) {
         </div>
 
         {/* Actions row */}
-        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/[0.04] dark:border-white/[0.04]">
+        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/[0.04] dark:border-white/[0.04]" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
           {/* Status button */}
           <button
             onPointerDown={(e) => e.stopPropagation()}
@@ -149,7 +153,7 @@ export function Card({ task }: CardProps) {
 
           {/* Focus time config */}
           {task.status === 'doing' && (
-            <div className="w-full mt-1.5" onPointerDown={(e) => e.stopPropagation()}>
+            <div className="w-full mt-1.5" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
               {showFocusInput ? (
                 <div className="flex items-center gap-1 w-full">
                   <input
