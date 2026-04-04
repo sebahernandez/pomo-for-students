@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IconPlayerPlay, IconPlayerPause, IconRotate, IconTarget, IconClock } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
@@ -15,10 +15,34 @@ export function TimerCard() {
     pauseTimer,
     resetTimer,
     setTimerMode,
+    setTimeLeft,
     language,
   } = useAppStore()
 
   const t = useTranslations(language)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editMinutes, setEditMinutes] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleTimeClick = () => {
+    if (timerStatus !== 'idle') return
+    setIsEditing(true)
+    setEditMinutes(String(Math.floor(timeLeft / 60)))
+    setTimeout(() => inputRef.current?.focus(), 50)
+  }
+
+  const handleTimeSave = () => {
+    const val = parseInt(editMinutes, 10)
+    if (val > 0 && val <= 120) {
+      setTimeLeft(val * 60)
+    }
+    setIsEditing(false)
+  }
+
+  const handleTimeKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleTimeSave()
+    if (e.key === 'Escape') setIsEditing(false)
+  }
 
   useEffect(() => {
     if (timerStatus !== 'running') return
@@ -137,9 +161,29 @@ export function TimerCard() {
             </defs>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-              {display}
-            </span>
+            {isEditing ? (
+              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                <input
+                  ref={inputRef}
+                  type="number"
+                  min={1}
+                  max={120}
+                  value={editMinutes}
+                  onChange={(e) => setEditMinutes(e.target.value)}
+                  onKeyDown={handleTimeKeyDown}
+                  onBlur={handleTimeSave}
+                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent text-neutral-900 dark:text-neutral-100 border-b-2 border-neutral-900 dark:border-neutral-100 focus:outline-none focus:border-green-500 dark:focus:border-green-400"
+                />
+                <span className="text-xl text-neutral-400 dark:text-neutral-500">min</span>
+              </div>
+            ) : (
+              <span
+                className={`text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 ${timerStatus === 'idle' ? 'cursor-pointer hover:text-green-600 dark:hover:text-green-400 transition-colors' : ''}`}
+                onClick={handleTimeClick}
+              >
+                {display}
+              </span>
+            )}
           </div>
         </div>
 
