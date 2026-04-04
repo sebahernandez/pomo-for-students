@@ -114,7 +114,7 @@ export function Card({ task }: CardProps) {
         </div>
 
         {/* Actions row */}
-        <div className="flex items-center gap-1.5 mt-2.5 pt-2 border-t border-black/[0.04] dark:border-white/[0.04]">
+        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/[0.04] dark:border-white/[0.04]">
           {/* Status button */}
           <button
             onPointerDown={(e) => e.stopPropagation()}
@@ -149,7 +149,7 @@ export function Card({ task }: CardProps) {
 
           {/* Focus time config */}
           {task.status === 'doing' && (
-            <div className="ml-auto shrink-0" onPointerDown={(e) => e.stopPropagation()}>
+            <div className="sm:ml-auto w-full sm:w-auto shrink-0" onPointerDown={(e) => e.stopPropagation()}>
               {showFocusInput ? (
                 <div className="flex items-center gap-1">
                   <input
@@ -159,13 +159,13 @@ export function Card({ task }: CardProps) {
                     value={focusInput}
                     onChange={(e) => setFocusInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleSaveFocusTime(); if (e.key === 'Escape') setShowFocusInput(false); }}
-                    className="w-10 text-xs bg-black/[0.04] dark:bg-white/[0.05] text-neutral-700 dark:text-neutral-200 px-1 py-1 rounded-md border border-black/[0.08] dark:border-white/[0.08] focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-500 text-center"
+                    className="w-14 sm:w-10 text-xs bg-black/[0.04] dark:bg-white/[0.05] text-neutral-700 dark:text-neutral-200 px-1 py-1.5 rounded-md border border-black/[0.08] dark:border-white/[0.08] focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-500 text-center"
                     autoFocus
                     placeholder="min"
                   />
                   <button
                     onClick={handleSaveFocusTime}
-                    className="text-xs bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 px-1.5 py-1 rounded-md"
+                    className="text-xs bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 px-1.5 py-1.5 rounded-md"
                   >
                     ✓
                   </button>
@@ -173,10 +173,10 @@ export function Card({ task }: CardProps) {
               ) : (
                 <button
                   onClick={() => { setShowFocusInput(true); setFocusInput(task.focusTime?.toString() ?? ''); }}
-                  className="text-xs bg-black/[0.04] dark:bg-white/[0.05] text-neutral-400 dark:text-neutral-500 px-2 py-1 rounded-md hover:bg-black/[0.08] dark:hover:bg-white/[0.1] transition-colors inline-flex items-center gap-1"
+                  className="text-xs bg-black/[0.04] dark:bg-white/[0.05] text-neutral-400 dark:text-neutral-500 px-2 py-1.5 rounded-md hover:bg-black/[0.08] dark:hover:bg-white/[0.1] transition-colors inline-flex items-center gap-1 w-full sm:w-auto justify-center"
                   title="Set focus time"
                 >
-                  <IconClock size={11} /> {task.focusTime ?? '—'}
+                  <IconClock size={11} /> {task.focusTime ?? '—'} min
                 </button>
               )}
             </div>
