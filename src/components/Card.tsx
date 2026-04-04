@@ -21,7 +21,7 @@ interface CardProps {
 export function Card({ task }: CardProps) {
   const activeTaskId = useAppStore((s) => s.activeTaskId)
   const timerStatus = useAppStore((s) => s.timerStatus)
-  const setActiveTask = useAppStore((s) => s.setActiveTask)
+  const switchActiveTask = useAppStore((s) => s.switchActiveTask)
   const startTimer = useAppStore((s) => s.startTimer)
   const pauseTimer = useAppStore((s) => s.pauseTimer)
   const moveTask = useAppStore((s) => s.moveTask)
@@ -41,7 +41,7 @@ export function Card({ task }: CardProps) {
         startTimer()
       }
     } else {
-      setActiveTask(task.id)
+      switchActiveTask(task.id)
       startTimer()
     }
   }

@@ -59,6 +59,7 @@ export function TimerCard() {
 
     const id = setInterval(() => {
       useAppStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }))
+      useAppStore.getState().saveTaskTime()
     }, 1000)
 
     return () => clearInterval(id)
@@ -72,7 +73,9 @@ export function TimerCard() {
 
   const activeTask = tasks.find((t) => t.id === activeTaskId)
   const settings = useAppStore.getState().settings
-  const totalSeconds = settings[timerMode] * 60
+  const totalSeconds = activeTask?.timeLeft !== null && activeTask?.timeLeft !== undefined
+    ? (settings.work * 60)
+    : settings[timerMode] * 60
   const progress = ((totalSeconds - timeLeft) / totalSeconds) * 100
 
   const circumference = 2 * Math.PI * 120

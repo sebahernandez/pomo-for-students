@@ -11,6 +11,7 @@ export interface Task {
   status: TaskStatus
   pomodorosCompleted: number
   createdAt: number
+  timeLeft: number | null
 }
 
 export interface SessionRecord {
@@ -48,6 +49,8 @@ interface AppState {
   resetTimer: () => void
   incrementSessions: () => void
   setActiveTask: (id: string | null) => void
+  switchActiveTask: (id: string) => void
+  saveTaskTime: () => void
   updateSettings: (settings: Settings) => void
   clearHistory: () => void
   toggleDarkMode: () => void
@@ -123,7 +126,7 @@ export const useAppStore = create<AppState>((set) => {
 
   tasks: loadTasks(),
   sessionHistory: loadHistory(),
-  darkMode: typeof window !== 'undefined' && localStorage.getItem('pomo-dark') === 'true',
+  darkMode: typeof window !== 'undefined' ? localStorage.getItem('pomo-dark') !== 'false' : true,
   language: (typeof window !== 'undefined' && (localStorage.getItem('pomo-lang') as Language)) || 'en',
 
   setTimerMode: (mode) =>
@@ -182,6 +185,31 @@ export const useAppStore = create<AppState>((set) => {
 
   setActiveTask: (id) => set({ activeTaskId: id }),
 
+  switchActiveTask: (id) =>
+    set((state) => {
+      let tasks = state.tasks
+      if (state.activeTaskId) {
+        tasks = tasks.map((t) =>
+          t.id === state.activeTaskId ? { ...t, timeLeft: state.timeLeft } : t
+        )
+        saveTasks(tasks)
+      }
+      const targetTask = tasks.find((t) => t.id === id)
+      const d = getDurations(state.settings)
+      const newTimeLeft = targetTask?.timeLeft ?? d.work
+      return { activeTaskId: id, timeLeft: newTimeLeft, timerStatus: 'idle', tasks }
+    }),
+
+  saveTaskTime: () =>
+    set((state) => {
+      if (!state.activeTaskId) return {}
+      const tasks = state.tasks.map((t) =>
+        t.id === state.activeTaskId ? { ...t, timeLeft: state.timeLeft } : t
+      )
+      saveTasks(tasks)
+      return { tasks }
+    }),
+
   updateSettings: (newSettings) =>
     set((state) => {
       saveSettings(newSettings)
@@ -201,6 +229,7 @@ export const useAppStore = create<AppState>((set) => {
         status: 'todo',
         pomodorosCompleted: 0,
         createdAt: Date.now(),
+        timeLeft: null,
       }
       const tasks = [...state.tasks, newTask]
       saveTasks(tasks)
@@ -217,7 +246,7 @@ export const useAppStore = create<AppState>((set) => {
   moveTask: (id, status) =>
     set((state) => {
       const tasks = state.tasks.map((t) =>
-        t.id === id ? { ...t, status } : t
+        t.id === id ? { ...t, status, timeLeft: (status === 'done' || status === 'todo') ? null : t.timeLeft } : t
       )
       saveTasks(tasks)
       return { tasks }
