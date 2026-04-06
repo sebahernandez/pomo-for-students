@@ -9,7 +9,7 @@ function setCookie(name: string, value: string, days: number = 365) {
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
-  return document.cookie.split('; ').reduce((r, v) => {
+  return document.cookie.split(';').reduce((r, v) => {
     const parts = v.split('=')
     return parts[0] === name ? decodeURIComponent(parts[1]) : r
   }, null as string | null)
