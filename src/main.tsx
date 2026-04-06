@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { Footer } from './components/Footer.tsx'
 import { Header } from './components/Header.tsx'
+import { OnboardingWizard } from './components/OnboardingWizard.tsx'
 import { useAppStore } from './context/AppContext.tsx'
 
 function DarkModeInit() {
@@ -17,6 +18,7 @@ function DarkModeInit() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DarkModeInit />
+    <OnboardingWizard />
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
