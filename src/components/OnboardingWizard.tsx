@@ -2,18 +2,7 @@ import { useState, useEffect } from 'react'
 import { IconX, IconChevronRight, IconChevronLeft, IconPlayerPlay, IconTarget, IconCheck, IconMoon, IconSun, IconClock, IconGripVertical } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 
-function setCookie(name: string, value: string, days: number = 365) {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString()
-  document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`
-}
-
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null
-  return document.cookie.split('; ').reduce((r, v) => {
-    const parts = v.split('=')
-    return parts[0] === name ? decodeURIComponent(parts[1]) : r
-  }, null as string | null)
-}
+const ONBOARDED_KEY = 'pomo-onboarded'
 
 const wizardContent = {
   es: [
@@ -88,14 +77,14 @@ export function OnboardingWizard() {
   const [step, setStep] = useState(0)
 
   useEffect(() => {
-    const hasSeen = getCookie('pomo-onboarded')
+    const hasSeen = localStorage.getItem(ONBOARDED_KEY)
     if (!hasSeen) {
       setIsOpen(true)
     }
   }, [])
 
   const handleClose = () => {
-    setCookie('pomo-onboarded', 'true')
+    localStorage.setItem(ONBOARDED_KEY, 'true')
     setIsOpen(false)
   }
 

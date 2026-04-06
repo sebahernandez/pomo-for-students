@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { Footer } from './components/Footer.tsx'
 import { Header } from './components/Header.tsx'
 import { OnboardingWizard } from './components/OnboardingWizard.tsx'
+import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { useAppStore } from './context/AppContext.tsx'
 
 function DarkModeInit() {
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DarkModeInit />
     <OnboardingWizard />
+    <CookieConsentBanner />
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
