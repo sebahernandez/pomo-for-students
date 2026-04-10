@@ -37,6 +37,86 @@ html.mode-longBreak {
   background-attachment: fixed;
 }
 
+/* Theme: Ocean - Light */
+html[data-theme="ocean"]:not(.dark) {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.08), transparent),
+              linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+  background-attachment: fixed;
+  color: #0c4a6e;
+}
+
+/* Theme: Ocean - Dark */
+html[data-theme="ocean"].dark {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.1), transparent),
+              linear-gradient(180deg, #0c1929 0%, #0f2744 50%, #0c2d4f 100%);
+  background-attachment: fixed;
+  color: #7dd3fc;
+}
+
+/* Theme: Forest - Light */
+html[data-theme="forest"]:not(.dark) {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.08), transparent),
+              linear-gradient(180deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%);
+  background-attachment: fixed;
+  color: #14532d;
+}
+
+/* Theme: Forest - Dark */
+html[data-theme="forest"].dark {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 197, 94, 0.1), transparent),
+              linear-gradient(180deg, #031a0e 0%, #052b1f 50%, #063525 100%);
+  background-attachment: fixed;
+  color: #86efac;
+}
+
+/* Theme: Sunset - Light */
+html[data-theme="sunset"]:not(.dark) {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(249, 115, 22, 0.08), transparent),
+              linear-gradient(180deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+  background-attachment: fixed;
+  color: #7c2d12;
+}
+
+/* Theme: Sunset - Dark */
+html[data-theme="sunset"].dark {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(249, 115, 22, 0.1), transparent),
+              linear-gradient(180deg, #1a0a02 0%, #2a1007 50%, #3a150c 100%);
+  background-attachment: fixed;
+  color: #fdba74;
+}
+
+/* Theme: Rose - Light */
+html[data-theme="rose"]:not(.dark) {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(244, 63, 94, 0.08), transparent),
+              linear-gradient(180deg, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
+  background-attachment: fixed;
+  color: #881337;
+}
+
+/* Theme: Rose - Dark */
+html[data-theme="rose"].dark {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(244, 63, 94, 0.1), transparent),
+              linear-gradient(180deg, #1f0509 0%, #2f0a0f 50%, #3f0f15 100%);
+  background-attachment: fixed;
+  color: #fda4af;
+}
+
+/* Theme: Midnight - Light */
+html[data-theme="midnight"]:not(.dark) {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.1), transparent),
+              linear-gradient(180deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  background-attachment: fixed;
+  color: #312e81;
+}
+
+/* Theme: Midnight - Dark */
+html[data-theme="midnight"].dark {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+              linear-gradient(180deg, #0a0a1a 0%, #12122a 50%, #1a1a3a 100%);
+  background-attachment: fixed;
+  color: #a5b4fc;
+}
+
 html.dark {
   background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(251, 146, 60, 0.06), transparent),
               linear-gradient(180deg, #0c0a09 0%, #0a0908 50%, #080706 100%);
@@ -116,6 +196,11 @@ html.dark {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -125,6 +210,7 @@ html.dark {
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-fade-in { animation: fade-in 0.4s ease-out; }
 .animate-slide-down { animation: slide-down 0.3s ease-out; }
+.animate-slide-up { animation: slide-up 0.3s ease-out; }
 
 .btn-primary {
   background: linear-gradient(135deg, #111827, #1f2937);

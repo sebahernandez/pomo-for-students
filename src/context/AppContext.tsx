@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { Language } from '../i18n/translations'
+import type { ThemeName } from '../themes'
 
 type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 type TimerStatus = 'idle' | 'running' | 'paused'
@@ -39,6 +40,7 @@ interface AppState {
   sessionHistory: SessionRecord[]
   darkMode: boolean
   language: Language
+  theme: ThemeName
 
   tasks: Task[]
 
@@ -56,6 +58,7 @@ interface AppState {
   clearHistory: () => void
   toggleDarkMode: () => void
   setLanguage: (lang: Language) => void
+  setTheme: (theme: ThemeName) => void
   setTaskFocusTime: (id: string, focusTime: number | null) => void
 
   addTask: (title: string) => void
@@ -130,6 +133,7 @@ export const useAppStore = create<AppState>((set) => {
   sessionHistory: loadHistory(),
   darkMode: typeof window !== 'undefined' ? localStorage.getItem('pomo-dark') !== 'false' : true,
   language: (typeof window !== 'undefined' && (localStorage.getItem('pomo-lang') as Language)) || 'es',
+  theme: (typeof window !== 'undefined' && (localStorage.getItem('pomo-theme') as ThemeName)) || 'neutral',
 
   setTimerMode: (mode) =>
     set((state) => {
@@ -283,6 +287,13 @@ export const useAppStore = create<AppState>((set) => {
     set(() => {
       localStorage.setItem('pomo-lang', lang)
       return { language: lang }
+    }),
+
+  setTheme: (theme) =>
+    set(() => {
+      localStorage.setItem('pomo-theme', theme)
+      document.documentElement.setAttribute('data-theme', theme)
+      return { theme }
     }),
 
   setTaskFocusTime: (id, focusTime) =>

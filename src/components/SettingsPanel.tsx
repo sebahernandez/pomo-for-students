@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { IconX, IconSettings, IconClock, IconCoffee, IconBeach } from '@tabler/icons-react'
 import { useAppStore, type Settings } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
+import { ThemeSelector } from './ThemeSelector'
 
 interface SettingsPanelProps {
   onClose: () => void
@@ -71,6 +72,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
                 className="input-glass"
               />
             </div>
+            <ThemeSelector />
             <div className="flex gap-2 pt-2">
               <button type="submit" className="btn-primary flex-1">
                 {t.save}
