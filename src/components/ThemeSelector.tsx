@@ -1,6 +1,6 @@
 import { useAppStore } from '../context/AppContext'
 import { themes, darkThemes, type ThemeName } from '../themes'
-import { IconPalette } from '@tabler/icons-react'
+import { IconPalette, IconCheck } from '@tabler/icons-react'
 
 export function ThemeSelector() {
   const { theme, setTheme, darkMode, language } = useAppStore()
@@ -15,27 +15,44 @@ export function ThemeSelector() {
       <div className="grid grid-cols-3 gap-2">
         {(Object.keys(themes) as ThemeName[]).map((themeName) => {
           const colors = currentThemes[themeName]
+          const isSelected = theme === themeName
           return (
             <button
               key={themeName}
               onClick={() => setTheme(themeName)}
-              className={`relative p-2 rounded-lg border-2 transition-all ${
-                theme === themeName
-                  ? 'border-neutral-900 dark:border-neutral-100'
-                  : 'border-transparent hover:border-neutral-200 dark:hover:border-neutral-700'
+              className={`relative p-2.5 rounded-xl border-2 transition-all ${
+                isSelected
+                  ? 'border-[var(--theme-primary)] shadow-lg'
+                  : 'border-transparent hover:border-neutral-200 dark:hover:border-neutral-700 hover:scale-[1.02]'
               }`}
+              style={{
+                background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientMid} 100%)`,
+              }}
             >
-              <div
-                className="h-8 rounded-md mb-1"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                }}
-              />
-              <span className="text-[10px] font-medium text-neutral-600 dark:text-neutral-400 block text-center">
+              <div className="flex items-center justify-center gap-1">
+                <div
+                  className="w-6 h-6 rounded-md"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  }}
+                />
+                <div
+                  className="w-6 h-6 rounded-md"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.accent} 100%)`,
+                  }}
+                />
+              </div>
+              <span className="text-[9px] font-medium mt-1 block text-center" style={{ color: colors.primary }}>
                 {colors.name}
               </span>
-              {theme === themeName && (
-                <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-neutral-900 dark:bg-neutral-100" />
+              {isSelected && (
+                <div 
+                  className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                  style={{ background: colors.primary, color: colors.gradientStart }}
+                >
+                  <IconCheck size={10} />
+                </div>
               )}
             </button>
           )
