@@ -92,10 +92,10 @@ export function TimerCard() {
     <div 
       className="glass animate-fade-in"
       style={{ 
-        background: `linear-gradient(135deg, ${themeColors.glassBg} 0%, ${themeColors.gradientStart}ee 100%)`,
+        background: themeColors.glassBg,
       }}
     >
-      <div className="p-8" style={{ background: `radial-gradient(circle at 50% 0%, ${themeColors.accentGlow} 0%, transparent 50%)` }}>
+      <div className="p-8">
         <div className="text-center mb-6">
           <span 
             className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"

@@ -86,7 +86,7 @@ export function KanbanBoard() {
       <div 
         className="glass glow animate-fade-in h-full"
         style={{
-          background: `linear-gradient(135deg, rgba(255,255,255,0.98) 0%, ${themeColors.gradientStart}cc 100%)`,
+          background: themeColors.glassBg,
         }}
       >
         <div className="p-6 flex flex-col h-full">
