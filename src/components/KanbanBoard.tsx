@@ -83,14 +83,19 @@ export function KanbanBoard() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="glass glow animate-fade-in h-full">
+      <div 
+        className="glass glow animate-fade-in h-full"
+        style={{
+          background: `linear-gradient(135deg, rgba(255,255,255,0.98) 0%, ${themeColors.gradientStart}cc 100%)`,
+        }}
+      >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 inline-flex items-center gap-2">
-              <IconClipboardList size={20} className="text-neutral-500 dark:text-neutral-400" />
+            <h2 className="text-lg font-bold inline-flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+              <IconClipboardList size={20} style={{ color: 'var(--color-text-secondary)' }} />
               {t.taskBoard}
             </h2>
-            <span className="text-xs text-neutral-400 dark:text-neutral-500">
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
               {t.tasks(tasks.length)}
             </span>
           </div>

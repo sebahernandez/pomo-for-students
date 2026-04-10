@@ -89,8 +89,13 @@ export function TimerCard() {
 
 
   return (
-    <div className="glass animate-fade-in">
-      <div className="p-8">
+    <div 
+      className="glass animate-fade-in"
+      style={{ 
+        background: `linear-gradient(135deg, ${themeColors.glassBg} 0%, ${themeColors.gradientStart}ee 100%)`,
+      }}
+    >
+      <div className="p-8" style={{ background: `radial-gradient(circle at 50% 0%, ${themeColors.accentGlow} 0%, transparent 50%)` }}>
         <div className="text-center mb-6">
           <span 
             className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
@@ -118,7 +123,8 @@ export function TimerCard() {
               fill="none"
               stroke="currentColor"
               strokeWidth="4"
-              className="text-neutral-200 dark:text-neutral-800"
+              className="transition-colors duration-300"
+              style={{ opacity: 0.2 }}
             />
             <circle
               cx="130" cy="130" r="120"

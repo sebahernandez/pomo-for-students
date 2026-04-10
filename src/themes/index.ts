@@ -10,6 +10,7 @@ export interface ThemeColors {
   gradientStart: string
   gradientMid: string
   gradientEnd: string
+  glassBg: string
 }
 
 export const themes: Record<ThemeName, ThemeColors> = {
@@ -23,6 +24,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#fafaf9',
     gradientMid: '#f5f5f4',
     gradientEnd: '#f0efee',
+    glassBg: 'rgba(255, 255, 255, 0.95)',
   },
   ocean: {
     name: 'Ocean',
@@ -34,6 +36,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#f0f9ff',
     gradientMid: '#e0f2fe',
     gradientEnd: '#bae6fd',
+    glassBg: 'rgba(240, 249, 255, 0.92)',
   },
   forest: {
     name: 'Forest',
@@ -45,6 +48,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#f0fdf4',
     gradientMid: '#dcfce7',
     gradientEnd: '#bbf7d0',
+    glassBg: 'rgba(240, 253, 244, 0.92)',
   },
   sunset: {
     name: 'Sunset',
@@ -56,6 +60,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#fff7ed',
     gradientMid: '#ffedd5',
     gradientEnd: '#fed7aa',
+    glassBg: 'rgba(255, 247, 237, 0.92)',
   },
   rose: {
     name: 'Rose',
@@ -67,6 +72,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#fff1f2',
     gradientMid: '#ffe4e6',
     gradientEnd: '#fecdd3',
+    glassBg: 'rgba(255, 241, 242, 0.92)',
   },
   midnight: {
     name: 'Midnight',
@@ -75,9 +81,10 @@ export const themes: Record<ThemeName, ThemeColors> = {
     secondary: '#a5b4fc',
     accent: '#c7d2fe',
     accentGlow: 'rgba(99, 102, 241, 0.2)',
-    gradientStart: '#1e1b4b',
-    gradientMid: '#312e81',
-    gradientEnd: '#3730a3',
+    gradientStart: '#eef2ff',
+    gradientMid: '#e0e7ff',
+    gradientEnd: '#c7d2fe',
+    glassBg: 'rgba(238, 242, 255, 0.92)',
   },
 }
 
@@ -92,6 +99,7 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#0c0a09',
     gradientMid: '#0a0908',
     gradientEnd: '#080706',
+    glassBg: 'rgba(12, 10, 9, 0.95)',
   },
   ocean: {
     name: 'Ocean',
@@ -103,6 +111,7 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#0c1929',
     gradientMid: '#0f2744',
     gradientEnd: '#0c2d4f',
+    glassBg: 'rgba(12, 25, 41, 0.95)',
   },
   forest: {
     name: 'Forest',
@@ -114,6 +123,7 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#031a0e',
     gradientMid: '#052b1f',
     gradientEnd: '#063525',
+    glassBg: 'rgba(3, 26, 14, 0.95)',
   },
   sunset: {
     name: 'Sunset',
@@ -125,6 +135,7 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#1a0a02',
     gradientMid: '#2a1007',
     gradientEnd: '#3a150c',
+    glassBg: 'rgba(26, 10, 2, 0.95)',
   },
   rose: {
     name: 'Rose',
@@ -136,6 +147,7 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#1f0509',
     gradientMid: '#2f0a0f',
     gradientEnd: '#3f0f15',
+    glassBg: 'rgba(31, 5, 9, 0.95)',
   },
   midnight: {
     name: 'Midnight',
@@ -147,5 +159,6 @@ export const darkThemes: Record<ThemeName, ThemeColors> = {
     gradientStart: '#0a0a1a',
     gradientMid: '#12122a',
     gradientEnd: '#1a1a3a',
+    glassBg: 'rgba(10, 10, 26, 0.95)',
   },
 }
