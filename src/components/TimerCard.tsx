@@ -161,13 +161,19 @@ export function TimerCard() {
                   onChange={(e) => setEditMinutes(e.target.value)}
                   onKeyDown={handleTimeKeyDown}
                   onBlur={handleTimeSave}
-                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent text-neutral-900 dark:text-neutral-100 border-b-2 border-neutral-900 dark:border-neutral-100 focus:outline-none focus:border-green-500 dark:focus:border-green-400"
+                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 focus:outline-none"
+                  style={{ 
+                    color: 'var(--color-text-primary)',
+                    borderColor: 'var(--color-text-primary)',
+                    '--tw-border-opacity': '0.3'
+                  } as React.CSSProperties}
                 />
                 <span className="text-xl text-neutral-400 dark:text-neutral-500">min</span>
               </div>
             ) : (
               <span
-                className={`text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 ${timerStatus === 'idle' ? 'cursor-pointer hover:text-green-600 dark:hover:text-green-400 transition-colors' : ''}`}
+                className={`text-6xl font-bold tracking-tight ${timerStatus === 'idle' ? 'cursor-pointer transition-colors' : ''}`}
+                style={{ color: 'var(--color-text-primary)' }}
                 onClick={handleTimeClick}
               >
                 {display}

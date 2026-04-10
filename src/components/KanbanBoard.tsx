@@ -4,9 +4,11 @@ import { IconPlus, IconClipboardList, IconCircle, IconCircleHalf, IconCircleChec
 import { useAppStore, type TaskStatus } from '../context/AppContext'
 import { DroppableColumn } from './DroppableColumn'
 import { useTranslations } from '../i18n/translations'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 export function KanbanBoard() {
   const { tasks, addTask, moveTask, setActiveTask, resetTimer, language } = useAppStore()
+  const themeColors = useThemeColors()
   const [newTask, setNewTask] = useState('')
   const [overId, setOverId] = useState<TaskStatus | null>(null)
 
@@ -21,9 +23,9 @@ export function KanbanBoard() {
   )
 
   const columns = [
-    { key: 'todo' as TaskStatus, label: t.toDo, icon: <IconCircle size={14} />, accent: 'border-blue-500 dark:border-blue-400', text: 'text-blue-500 dark:text-blue-400', dropBg: 'bg-blue-500/5 dark:bg-blue-400/5' },
-    { key: 'doing' as TaskStatus, label: t.inProgress, icon: <IconCircleHalf size={14} />, accent: 'border-amber-500 dark:border-amber-400', text: 'text-amber-500 dark:text-amber-400', dropBg: 'bg-amber-500/5 dark:bg-amber-400/5' },
-    { key: 'done' as TaskStatus, label: t.done, icon: <IconCircleCheck size={14} />, accent: 'border-emerald-500 dark:border-emerald-400', text: 'text-emerald-500 dark:text-emerald-400', dropBg: 'bg-emerald-500/5 dark:bg-emerald-400/5' },
+    { key: 'todo' as TaskStatus, label: t.toDo, icon: <IconCircle size={14} /> },
+    { key: 'doing' as TaskStatus, label: t.inProgress, icon: <IconCircleHalf size={14} /> },
+    { key: 'done' as TaskStatus, label: t.done, icon: <IconCircleCheck size={14} /> },
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -107,9 +109,15 @@ export function KanbanBoard() {
           </form>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 content-start w-full">
-            {columns.map((col) => {
+            {columns.map((col, index) => {
               const columnTasks = tasks.filter((t) => t.status === col.key)
               const isOver = overId === col.key
+
+              const colors = [
+                { accent: themeColors.secondary, bg: `${themeColors.secondary}10` },
+                { accent: themeColors.primary, bg: `${themeColors.primary}15` },
+                { accent: themeColors.accent, bg: `${themeColors.accent}10` },
+              ][index]
 
               return (
                 <div key={col.key} className="min-w-0">
@@ -118,6 +126,9 @@ export function KanbanBoard() {
                     tasks={columnTasks}
                     isOver={isOver}
                     emptyLabel={t.empty}
+                    accentColor={colors.accent}
+                    textColor={colors.accent}
+                    dropBg={colors.bg}
                   />
                 </div>
               )

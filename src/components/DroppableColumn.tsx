@@ -9,17 +9,17 @@ interface DroppableColumnProps {
     key: TaskStatus
     label: string
     icon: React.ReactNode
-    accent: string
-    text: string
-    dropBg: string
   }
   tasks: Task[]
   isOver: boolean
   emptyLabel: string
+  accentColor: string
+  textColor: string
+  dropBg: string
   children?: React.ReactNode
 }
 
-export function DroppableColumn({ col, tasks, isOver, emptyLabel, children }: DroppableColumnProps) {
+export function DroppableColumn({ col, tasks, isOver, emptyLabel, accentColor, textColor, dropBg, children }: DroppableColumnProps) {
   const { setNodeRef } = useDroppable({
     id: col.key,
   })
@@ -27,15 +27,18 @@ export function DroppableColumn({ col, tasks, isOver, emptyLabel, children }: Dr
   return (
     <div
       ref={setNodeRef}
-      className={`rounded-xl p-4 border-t-2 transition-colors duration-200 ${col.accent} ${isOver ? col.dropBg : 'bg-black/[0.02] dark:bg-white/[0.02]'}`}
-      style={{minWidth: 0}}
+      className={`rounded-xl p-4 border-t-2 transition-colors duration-200 ${isOver ? dropBg : 'bg-black/[0.02] dark:bg-white/[0.02]'}`}
+      style={{ 
+        minWidth: 0,
+        borderColor: accentColor 
+      }}
     >
       <div className="flex items-center gap-2 mb-3">
-        <span className={col.text}>{col.icon}</span>
-        <h3 className={`text-xs font-semibold uppercase tracking-wider ${col.text}`}>
+        <span style={{ color: accentColor }}>{col.icon}</span>
+        <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: accentColor }}>
           {col.label}
         </h3>
-        <span className={`ml-auto text-xs font-semibold ${col.text}`}>
+        <span className="ml-auto text-xs font-semibold" style={{ color: accentColor }}>
           {tasks.length}
         </span>
       </div>
