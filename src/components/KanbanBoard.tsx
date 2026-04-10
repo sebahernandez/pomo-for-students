@@ -11,7 +11,11 @@ export function KanbanBoard() {
   const themeColors = useThemeColors()
   const [newTask, setNewTask] = useState('')
   const [overId, setOverId] = useState<TaskStatus | null>(null)
-  const textColor = darkMode ? 'white' : 'black'
+  const t = useTranslations(language)
+
+  const textPrimary = darkMode ? 'white' : 'black'
+  const textSecondary = darkMode ? 'white/70' : 'black/70'
+  const textMuted = darkMode ? 'white/50' : 'black/50'
 
   const t = useTranslations(language)
 
@@ -92,11 +96,11 @@ export function KanbanBoard() {
       >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h2 className={`text-lg font-bold inline-flex items-center gap-2 ${darkMode ? 'text-white' : 'text-black'}`}>
-              <IconClipboardList size={20} className={darkMode ? 'text-white/70' : 'text-black/70'} />
+            <h2 className={`text-lg font-bold inline-flex items-center gap-2 ${textPrimary}`}>
+              <IconClipboardList size={20} className={textSecondary} />
               {t.taskBoard}
             </h2>
-            <span className={`text-xs ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
+            <span className={`text-xs ${textMuted}`}>
               {t.tasks(tasks.length)}
             </span>
           </div>
