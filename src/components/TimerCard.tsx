@@ -19,10 +19,12 @@ export function TimerCard() {
     setTimerMode,
     setTimeLeft,
     language,
+    darkMode,
   } = useAppStore()
 
   const themeColors = useThemeColors()
   const t = useTranslations(language)
+  const textColor = darkMode ? 'white' : 'black'
   const [isEditing, setIsEditing] = useState(false)
   const [editMinutes, setEditMinutes] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -167,14 +169,15 @@ export function TimerCard() {
                   onChange={(e) => setEditMinutes(e.target.value)}
                   onKeyDown={handleTimeKeyDown}
                   onBlur={handleTimeSave}
-                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 border-white/30 focus:border-white focus:outline-none text-white placeholder-white/30"
+                  className={`w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 focus:outline-none ${darkMode ? 'border-white/30 focus:border-white text-white placeholder-white/30' : 'border-black/30 focus:border-black text-black placeholder-black/30'}`}
                   placeholder="00"
                 />
-                <span className="text-xl text-white/50">min</span>
+                <span className={`text-xl ${darkMode ? 'text-white/50' : 'text-black/50'}`}>min</span>
               </div>
             ) : (
               <span
-                className={`text-6xl font-bold tracking-tight text-white ${timerStatus === 'idle' ? 'cursor-pointer transition-colors hover:opacity-80' : ''}`}
+                className={`text-6xl font-bold tracking-tight ${timerStatus === 'idle' ? 'cursor-pointer transition-colors hover:opacity-80' : ''}`}
+                style={{ color: textColor }}
                 onClick={handleTimeClick}
               >
                 {display}
@@ -184,7 +187,7 @@ export function TimerCard() {
         </div>
 
         <div className="text-center mb-6">
-          <span className="inline-flex items-center gap-1.5 text-sm text-white/50">
+          <span className={`inline-flex items-center gap-1.5 text-sm ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
             <IconClock size={14} />
             {t.sessionsCompleted(sessionsCompleted)}
           </span>

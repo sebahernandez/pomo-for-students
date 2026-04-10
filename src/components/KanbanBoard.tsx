@@ -7,10 +7,11 @@ import { useTranslations } from '../i18n/translations'
 import { useThemeColors } from '../hooks/useThemeColors'
 
 export function KanbanBoard() {
-  const { tasks, addTask, moveTask, setActiveTask, resetTimer, language } = useAppStore()
+  const { tasks, addTask, moveTask, setActiveTask, resetTimer, language, darkMode } = useAppStore()
   const themeColors = useThemeColors()
   const [newTask, setNewTask] = useState('')
   const [overId, setOverId] = useState<TaskStatus | null>(null)
+  const textColor = darkMode ? 'white' : 'black'
 
   const t = useTranslations(language)
 
@@ -91,11 +92,11 @@ export function KanbanBoard() {
       >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold inline-flex items-center gap-2 text-white">
-              <IconClipboardList size={20} className="text-white/70" />
+            <h2 className={`text-lg font-bold inline-flex items-center gap-2 ${darkMode ? 'text-white' : 'text-black'}`}>
+              <IconClipboardList size={20} className={darkMode ? 'text-white/70' : 'text-black/70'} />
               {t.taskBoard}
             </h2>
-            <span className="text-xs text-white/50">
+            <span className={`text-xs ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
               {t.tasks(tasks.length)}
             </span>
           </div>
