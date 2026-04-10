@@ -91,11 +91,11 @@ export function KanbanBoard() {
       >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold inline-flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
-              <IconClipboardList size={20} style={{ color: 'var(--color-text-secondary)' }} />
+            <h2 className="text-lg font-bold inline-flex items-center gap-2 text-white">
+              <IconClipboardList size={20} className="text-white/70" />
               {t.taskBoard}
             </h2>
-            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="text-xs text-white/50">
               {t.tasks(tasks.length)}
             </span>
           </div>

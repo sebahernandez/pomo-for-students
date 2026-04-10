@@ -167,19 +167,14 @@ export function TimerCard() {
                   onChange={(e) => setEditMinutes(e.target.value)}
                   onKeyDown={handleTimeKeyDown}
                   onBlur={handleTimeSave}
-                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 focus:outline-none"
-                  style={{ 
-                    color: 'var(--color-text-primary)',
-                    borderColor: 'var(--color-text-primary)',
-                    '--tw-border-opacity': '0.3'
-                  } as React.CSSProperties}
+                  className="w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 border-white/30 focus:border-white focus:outline-none text-white placeholder-white/30"
+                  placeholder="00"
                 />
-                <span className="text-xl text-neutral-400 dark:text-neutral-500">min</span>
+                <span className="text-xl text-white/50">min</span>
               </div>
             ) : (
               <span
-                className={`text-6xl font-bold tracking-tight ${timerStatus === 'idle' ? 'cursor-pointer transition-colors' : ''}`}
-                style={{ color: 'var(--color-text-primary)' }}
+                className={`text-6xl font-bold tracking-tight text-white ${timerStatus === 'idle' ? 'cursor-pointer transition-colors hover:opacity-80' : ''}`}
                 onClick={handleTimeClick}
               >
                 {display}
@@ -189,7 +184,7 @@ export function TimerCard() {
         </div>
 
         <div className="text-center mb-6">
-          <span className="inline-flex items-center gap-1.5 text-sm text-neutral-400 dark:text-neutral-500">
+          <span className="inline-flex items-center gap-1.5 text-sm text-white/50">
             <IconClock size={14} />
             {t.sessionsCompleted(sessionsCompleted)}
           </span>
