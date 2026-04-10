@@ -14,12 +14,11 @@ interface DroppableColumnProps {
   isOver: boolean
   emptyLabel: string
   accentColor: string
-  textColor: string
   dropBg: string
   children?: React.ReactNode
 }
 
-export function DroppableColumn({ col, tasks, isOver, emptyLabel, accentColor, textColor, dropBg, children }: DroppableColumnProps) {
+export function DroppableColumn({ col, tasks, isOver, emptyLabel, accentColor, dropBg, children }: DroppableColumnProps) {
   const { setNodeRef } = useDroppable({
     id: col.key,
   })

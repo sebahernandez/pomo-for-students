@@ -132,7 +132,6 @@ export function KanbanBoard() {
                     isOver={isOver}
                     emptyLabel={t.empty}
                     accentColor={colors.accent}
-                    textColor={colors.accent}
                     dropBg={colors.bg}
                   />
                 </div>
