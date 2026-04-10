@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { IconX, IconFlame, IconTarget, IconCircleDashed, IconCircleCheck, IconPlayerPlay, IconPlayerPause, IconClock } from '@tabler/icons-react'
 import { useAppStore, type Task, type TaskStatus } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 const NEXT_STATUS: Record<TaskStatus, TaskStatus> = {
   todo: 'doing',
@@ -30,6 +31,7 @@ export function Card({ task }: CardProps) {
   const setTaskFocusTime = useAppStore((s) => s.setTaskFocusTime)
   const language = useAppStore((s) => s.language)
 
+  const themeColors = useThemeColors()
   const t = useTranslations(language)
   const nextStatus = NEXT_STATUS[task.status]
   const isActive = task.id === activeTaskId
@@ -135,9 +137,10 @@ export function Card({ task }: CardProps) {
               onPointerDown={(e) => e.stopPropagation()}
               className={`text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0 ${
                 isActive
-                  ? 'bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
+                  ? 'text-white dark:text-neutral-900'
                   : 'bg-black/[0.04] dark:bg-white/[0.05] text-neutral-700 dark:text-neutral-200 hover:bg-black/[0.08] dark:hover:bg-white/[0.1]'
               }`}
+              style={isActive ? { backgroundColor: themeColors.primary } : {}}
             >
               {isActive ? (
                 isRunning ? (
@@ -169,7 +172,8 @@ export function Card({ task }: CardProps) {
                   />
                   <button
                     onClick={handleSaveFocusTime}
-                    className="text-xs bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 px-2 py-1.5 rounded-md"
+                    className="text-xs px-2 py-1.5 rounded-md"
+                    style={{ backgroundColor: themeColors.primary, color: themeColors.gradientEnd }}
                   >
                     ✓
                   </button>

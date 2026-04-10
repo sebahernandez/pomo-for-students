@@ -8,8 +8,8 @@ export interface ThemeColors {
   accent: string
   accentGlow: string
   gradientStart: string
-  gradientEnd: string
   gradientMid: string
+  gradientEnd: string
 }
 
 export const themes: Record<ThemeName, ThemeColors> = {

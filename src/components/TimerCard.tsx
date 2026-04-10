@@ -3,6 +3,7 @@ import { IconPlayerPlay, IconPlayerPause, IconRotate, IconTarget, IconClock } fr
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
 import { playCompletionSound } from '../lib/audio'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 export function TimerCard() {
   const {
@@ -20,7 +21,7 @@ export function TimerCard() {
     language,
   } = useAppStore()
 
-
+  const themeColors = useThemeColors()
   const t = useTranslations(language)
   const [isEditing, setIsEditing] = useState(false)
   const [editMinutes, setEditMinutes] = useState('')
@@ -91,7 +92,13 @@ export function TimerCard() {
     <div className="glass animate-fade-in">
       <div className="p-8">
         <div className="text-center mb-6">
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900">
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
+            style={{ 
+              backgroundColor: themeColors.primary, 
+              color: themeColors.gradientEnd 
+            }}
+          >
             {modeLabel}
           </span>
         </div>
@@ -116,7 +123,7 @@ export function TimerCard() {
             <circle
               cx="130" cy="130" r="120"
               fill="none"
-              stroke="url(#gradient)"
+              stroke="url(#themeGradient)"
               strokeWidth="4"
               strokeLinecap="round"
               strokeDasharray={circumference}
@@ -136,9 +143,9 @@ export function TimerCard() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#22c55e" />
-                <stop offset="100%" stopColor="#4ade80" />
+              <linearGradient id="themeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={themeColors.secondary} />
+                <stop offset="100%" stopColor={themeColors.accent} />
               </linearGradient>
             </defs>
           </svg>

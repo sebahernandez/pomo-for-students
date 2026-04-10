@@ -18,6 +18,7 @@
   --theme-secondary: #6b7280;
   --theme-accent: #111827;
   --theme-glow: rgba(17, 24, 39, 0.1);
+  --theme-gradientEnd: #ffffff;
 }
 
 html {
@@ -148,6 +149,7 @@ html[data-theme="neutral"] {
   --theme-secondary: #6b7280;
   --theme-accent: #111827;
   --theme-glow: rgba(17, 24, 39, 0.1);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="neutral"].dark {
@@ -156,6 +158,7 @@ html[data-theme="neutral"].dark {
   --theme-secondary: #a3a3a3;
   --theme-accent: #fafafa;
   --theme-glow: rgba(255, 255, 255, 0.05);
+  --theme-gradientEnd: #0c0a09;
 }
 
 html[data-theme="ocean"] {
@@ -164,6 +167,7 @@ html[data-theme="ocean"] {
   --theme-secondary: #3282b8;
   --theme-accent: #bbe1fa;
   --theme-glow: rgba(59, 130, 246, 0.15);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="ocean"].dark {
@@ -172,6 +176,7 @@ html[data-theme="ocean"].dark {
   --theme-secondary: #38bdf8;
   --theme-accent: #0ea5e9;
   --theme-glow: rgba(56, 189, 248, 0.2);
+  --theme-gradientEnd: #0c1929;
 }
 
 html[data-theme="forest"] {
@@ -180,6 +185,7 @@ html[data-theme="forest"] {
   --theme-secondary: #40916c;
   --theme-accent: #74c69d;
   --theme-glow: rgba(16, 185, 129, 0.15);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="forest"].dark {
@@ -188,6 +194,7 @@ html[data-theme="forest"].dark {
   --theme-secondary: #4ade80;
   --theme-accent: #22c55e;
   --theme-glow: rgba(34, 197, 94, 0.2);
+  --theme-gradientEnd: #031a0e;
 }
 
 html[data-theme="sunset"] {
@@ -196,6 +203,7 @@ html[data-theme="sunset"] {
   --theme-secondary: #ea580c;
   --theme-accent: #fdba74;
   --theme-glow: rgba(249, 115, 22, 0.15);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="sunset"].dark {
@@ -204,6 +212,7 @@ html[data-theme="sunset"].dark {
   --theme-secondary: #fb923c;
   --theme-accent: #f97316;
   --theme-glow: rgba(249, 115, 22, 0.2);
+  --theme-gradientEnd: #1a0a02;
 }
 
 html[data-theme="rose"] {
@@ -212,6 +221,7 @@ html[data-theme="rose"] {
   --theme-secondary: #e11d48;
   --theme-accent: #fda4af;
   --theme-glow: rgba(244, 63, 94, 0.15);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="rose"].dark {
@@ -220,6 +230,7 @@ html[data-theme="rose"].dark {
   --theme-secondary: #fb7185;
   --theme-accent: #f43f5e;
   --theme-glow: rgba(244, 63, 94, 0.2);
+  --theme-gradientEnd: #1f0509;
 }
 
 html[data-theme="midnight"] {
@@ -228,6 +239,7 @@ html[data-theme="midnight"] {
   --theme-secondary: #a5b4fc;
   --theme-accent: #c7d2fe;
   --theme-glow: rgba(99, 102, 241, 0.2);
+  --theme-gradientEnd: #ffffff;
 }
 
 html[data-theme="midnight"].dark {
@@ -236,6 +248,7 @@ html[data-theme="midnight"].dark {
   --theme-secondary: #818cf8;
   --theme-accent: #6366f1;
   --theme-glow: rgba(99, 102, 241, 0.25);
+  --theme-gradientEnd: #0a0a1a;
 }
 
 .glass {
@@ -315,8 +328,8 @@ html.dark {
 .animate-slide-up { animation: slide-up 0.3s ease-out; }
 
 .btn-primary {
-  background: linear-gradient(135deg, #111827, #1f2937);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-hover));
+  color: var(--theme-gradientEnd);
   padding: 0.5rem 1.25rem;
   border-radius: 0.75rem;
   font-size: 0.875rem;
@@ -327,19 +340,9 @@ html.dark {
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #1f2937, #374151);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, var(--theme-primary-hover), var(--theme-secondary));
+  box-shadow: 0 4px 12px var(--theme-glow);
   transform: translateY(-1px);
-}
-
-html.dark .btn-primary {
-  background: linear-gradient(135deg, #e5e5e5, #d4d4d4);
-  color: #0a0a0a;
-}
-
-html.dark .btn-primary:hover {
-  background: linear-gradient(135deg, #ffffff, #e5e5e5);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
 }
 
 .btn-primary:active {
@@ -380,8 +383,8 @@ html.dark .btn-secondary:hover {
 }
 
 .btn-success {
-  background: linear-gradient(135deg, #111827, #1f2937);
-  color: white;
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-hover));
+  color: var(--theme-gradientEnd);
   padding: 0.625rem 1.5rem;
   border-radius: 0.75rem;
   font-size: 0.875rem;
@@ -392,22 +395,30 @@ html.dark .btn-secondary:hover {
 }
 
 .btn-success:hover {
-  background: linear-gradient(135deg, #1f2937, #374151);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, var(--theme-primary-hover), var(--theme-secondary));
+  box-shadow: 0 4px 12px var(--theme-glow);
   transform: translateY(-1px);
 }
 
-html.dark .btn-success {
-  background: linear-gradient(135deg, #e5e5e5, #d4d4d4);
-  color: #0a0a0a;
-}
-
-html.dark .btn-success:hover {
-  background: linear-gradient(135deg, #ffffff, #e5e5e5);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
-}
-
 .btn-warning {
+  background: linear-gradient(135deg, var(--theme-secondary), var(--theme-accent));
+  color: var(--theme-gradientEnd);
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, var(--theme-accent), var(--theme-secondary));
+  box-shadow: 0 4px 12px var(--theme-glow);
+  transform: translateY(-1px);
+}
+
+.btn-danger {
   background: linear-gradient(135deg, #4b5563, #6b7280);
   color: white;
   padding: 0.625rem 1.5rem;
@@ -419,42 +430,14 @@ html.dark .btn-success:hover {
   cursor: pointer;
 }
 
-.btn-warning:hover {
-  background: linear-gradient(135deg, #6b7280, #9ca3af);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-html.dark .btn-warning {
-  background: linear-gradient(135deg, #525252, #737373);
-  color: #e5e5e5;
-}
-
-html.dark .btn-warning:hover {
-  background: linear-gradient(135deg, #737373, #a3a3a3);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.06);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #6b7280, #9ca3af);
-  color: white;
-  padding: 0.625rem 1.5rem;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-}
-
 .btn-danger:hover {
-  background: linear-gradient(135deg, #9ca3af, #d1d5db);
+  background: linear-gradient(135deg, #6b7280, #9ca3af);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
 
 html.dark .btn-danger {
-  background: linear-gradient(135deg, #404040, #525252);
+  background: linear-gradient(135deg, #525252, #737373);
   color: #d4d4d4;
 }
 
