@@ -17,8 +17,6 @@ export function KanbanBoard() {
   const textSecondary = darkMode ? 'white/70' : 'black/70'
   const textMuted = darkMode ? 'white/50' : 'black/50'
 
-  const t = useTranslations(language)
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {

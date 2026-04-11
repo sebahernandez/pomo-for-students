@@ -34,8 +34,10 @@ export function Card({ task }: CardProps) {
 
   const themeColors = useThemeColors()
   const t = useTranslations(language)
+  
   const isActive = task.id === activeTaskId
   const isRunning = isActive && timerStatus === 'running'
+  const nextStatus = NEXT_STATUS[task.status]
   const textPrimary = darkMode ? 'text-neutral-200' : 'text-neutral-800'
   const textSecondary = darkMode ? 'text-neutral-300' : 'text-neutral-600'
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400'
