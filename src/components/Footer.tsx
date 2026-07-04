@@ -4,22 +4,22 @@ const VERSION = '1.0.0'
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-neutral-200 dark:border-neutral-800">
+    <footer className="w-full border-t border-neutral-200 dark:border-white light:bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
       <div className="max-w-7xl mx-auto px-2 lg:px-0 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-400 dark:text-neutral-500">
-              pomodoro for students, by Kreadium.cl
+            <span className="text-xs text-neutral-400 dark:text-neutral-200">
+              Pomodoro for students, by Kreadium.cl
             </span>
-            <span className="text-xs text-neutral-300 dark:text-neutral-600">© 2026</span>
+            <span className="text-xs text-neutral-300 dark:text-neutral-200">© 2026</span>
           </div>
 
           <div className="flex items-center gap-4">
             <span className="text-[0.65rem] px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 font-mono">
               v{VERSION}
             </span>
-            <span className="text-[0.6rem] text-neutral-300 dark:text-neutral-600 inline-flex items-center gap-0.5">
-              Made with <IconHeart size={10} className="text-neutral-400 dark:text-neutral-500" />
+            <span className="text-[0.6rem] text-neutral-300 dark:text-neutral-200 inline-flex items-center gap-0.5">
+              Made with <IconHeart size={10} className="text-neutral-400 dark:text-neutral-200" />
             </span>
           </div>
         </div>
