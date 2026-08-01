@@ -305,11 +305,21 @@ html.dark {
   100% { background-position: 200% 0; }
 }
 
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-fade-in { animation: fade-in 0.4s ease-out; }
 .animate-slide-down { animation: slide-down 0.3s ease-out; }
 .animate-slide-up { animation: slide-up 0.3s ease-out; }
+.animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in-right { animation: fade-in 0.2s ease-out; }
+}
 
 .btn-primary {
   background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-hover));
@@ -491,6 +501,23 @@ html.dark .modal-glass {
   background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* Drawer: side panel anchored to the right edge, reusing the modal glass look
+   but with the anchored (right) edge squared off and full-height. */
+.drawer-panel {
+  background: #ffffff;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 1.25rem 0 0 1.25rem;
+  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.12);
+}
+
+html.dark .drawer-panel {
+  background: rgba(10, 10, 10, 0.95);
+  border-left-color: rgba(255, 255, 255, 0.06);
+  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.5);
 }
 
 .tag-accent {

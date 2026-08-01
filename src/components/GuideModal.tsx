@@ -1,6 +1,7 @@
-import { IconX, IconBook, IconClock, IconCircleHalf, IconCheck, IconTarget, IconPlayerPlay, IconSettings, IconChartBar, IconPlayerPause, IconGripVertical, IconArrowBigRight } from '@tabler/icons-react'
+import { IconBook, IconClock, IconCircleHalf, IconCheck, IconTarget, IconPlayerPlay, IconSettings, IconChartBar, IconPlayerPause, IconGripVertical, IconArrowBigRight } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
+import { Drawer } from './Drawer'
 
 interface GuideModalProps {
   onClose: () => void
@@ -35,43 +36,34 @@ export function GuideModal({ onClose }: GuideModalProps) {
   ]
 
   return (
-    <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
-      <div className="modal-glass w-full max-w-lg animate-slide-down max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
-        <div className="p-6 flex flex-col flex-1 overflow-hidden">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 inline-flex items-center gap-2">
-              <IconBook size={20} className="text-neutral-500 dark:text-neutral-400" />
-              {language === 'es' ? 'Guía de Uso' : 'User Guide'}
-            </h2>
-            <button onClick={onClose} className="text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors">
-              <IconX size={20} />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto pr-1 space-y-4">
-            {steps.map((step, i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 flex items-center justify-center">
-                  {step.icon}
-                </div>
-                <div className="flex-1 pt-1">
-                  <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{step.title}</h3>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
-            <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
-              <span>{language === 'es' ? 'Tip: Cada tarea tiene su propio temporizador independiente.' : 'Tip: Each task has its own independent timer.'}</span>
-              <button onClick={onClose} className="btn-primary">
-                {t.close}
-              </button>
+    <Drawer
+      onClose={onClose}
+      title={language === 'es' ? 'Guía de Uso' : 'User Guide'}
+      icon={<IconBook size={20} className="text-neutral-500 dark:text-neutral-400" />}
+      maxWidthClass="max-w-lg"
+    >
+      <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+        {steps.map((step, i) => (
+          <div key={i} className="flex gap-4 items-start">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 flex items-center justify-center">
+              {step.icon}
+            </div>
+            <div className="flex-1 pt-1">
+              <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{step.title}</h3>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">{step.desc}</p>
             </div>
           </div>
+        ))}
+      </div>
+
+      <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+        <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
+          <span>{language === 'es' ? 'Tip: Cada tarea tiene su propio temporizador independiente.' : 'Tip: Each task has its own independent timer.'}</span>
+          <button onClick={onClose} className="btn-primary">
+            {t.close}
+          </button>
         </div>
       </div>
-    </div>
+    </Drawer>
   )
 }
