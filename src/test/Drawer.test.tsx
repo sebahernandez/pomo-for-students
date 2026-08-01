@@ -5,6 +5,7 @@ import { Drawer } from '../components/Drawer'
 import { SettingsPanel } from '../components/SettingsPanel'
 import { SessionHistory } from '../components/SessionHistory'
 import { GuideModal } from '../components/GuideModal'
+import { useAppStore } from '../context/AppContext'
 
 describe('Drawer', () => {
   it('renders its children inside a labelled dialog', () => {
@@ -83,6 +84,54 @@ describe('Panels presented as drawers', () => {
 
     await user.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('SettingsPanel keeps the previous value when a field is saved empty', async () => {
+    const user = userEvent.setup()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={vi.fn()} />)
+
+    const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
+    await user.clear(workInput)
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    // Empty input must not persist 0/NaN; the previous value is retained.
+    expect(useAppStore.getState().settings.work).toBe(25)
+    expect(workInput.value).toBe('25')
+  })
+
+  it('SettingsPanel clamps an out-of-range value to the field limit on save', async () => {
+    const user = userEvent.setup()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={vi.fn()} />)
+
+    const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
+    await user.clear(workInput)
+    await user.type(workInput, '999')
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    // Focus max is 60; the value is clamped and reflected back into the input.
+    expect(useAppStore.getState().settings.work).toBe(60)
+    expect(workInput.value).toBe('60')
+  })
+
+  it('SettingsPanel persists valid values and keeps the drawer open on save', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={onClose} />)
+
+    const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
+    await user.clear(workInput)
+    await user.type(workInput, '30')
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    const state = useAppStore.getState()
+    expect(state.settings.work).toBe(30)
+    // Saving reloads the current mode timer (work) to the new duration in seconds.
+    expect(state.timeLeft).toBe(30 * 60)
+    expect(onClose).not.toHaveBeenCalled()
+    expect(screen.getByRole('dialog', { name: 'Configuración' })).toBeInTheDocument()
   })
 
   it('SessionHistory opens as a drawer and closes via the close button', async () => {
