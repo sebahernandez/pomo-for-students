@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { IconX, IconChevronRight, IconChevronLeft, IconPlayerPlay, IconTarget, IconCheck, IconMoon, IconSun, IconClock, IconGripVertical } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 
@@ -73,15 +73,8 @@ const wizardContent = {
 
 export function OnboardingWizard() {
   const { language, darkMode, toggleDarkMode, setLanguage } = useAppStore()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(() => !localStorage.getItem(ONBOARDED_KEY))
   const [step, setStep] = useState(0)
-
-  useEffect(() => {
-    const hasSeen = localStorage.getItem(ONBOARDED_KEY)
-    if (!hasSeen) {
-      setIsOpen(true)
-    }
-  }, [])
 
   const handleClose = () => {
     localStorage.setItem(ONBOARDED_KEY, 'true')

@@ -13,7 +13,7 @@ describe('OnboardingWizard', () => {
     render(<OnboardingWizard />)
     
     await waitFor(() => {
-      expect(screen.getByText(/Bienvenido a Pomodoro/i)).toBeInTheDocument()
+      expect(screen.getByText(/Bienvenido a POMO/i)).toBeInTheDocument()
     })
   })
 
@@ -23,7 +23,7 @@ describe('OnboardingWizard', () => {
     render(<OnboardingWizard />)
     
     await waitFor(() => {
-      expect(screen.queryByText(/Bienvenido a Pomodoro/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Bienvenido a POMO/i)).not.toBeInTheDocument()
     })
   })
 
@@ -33,7 +33,7 @@ describe('OnboardingWizard', () => {
     render(<OnboardingWizard />)
     
     await waitFor(() => {
-      expect(screen.getByText(/Bienvenido a Pomodoro/i)).toBeInTheDocument()
+      expect(screen.getByText(/Bienvenido a POMO/i)).toBeInTheDocument()
     })
     
     for (let i = 0; i < 4; i++) {
@@ -45,7 +45,7 @@ describe('OnboardingWizard', () => {
     await user.click(closeButton)
     
     await waitFor(() => {
-      expect(screen.queryByText(/Bienvenido a Pomodoro/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Bienvenido a POMO/i)).not.toBeInTheDocument()
     })
     
     expect(window.localStorage.getItem('pomo-onboarded')).toBe('true')
@@ -57,7 +57,7 @@ describe('OnboardingWizard', () => {
     render(<OnboardingWizard />)
     
     await waitFor(() => {
-      expect(screen.getByText(/Bienvenido a Pomodoro/i)).toBeInTheDocument()
+      expect(screen.getByText(/Bienvenido a POMO/i)).toBeInTheDocument()
     })
     
     const nextButton = screen.getByRole('button', { name: /Siguiente|Next/i })
@@ -71,7 +71,7 @@ describe('OnboardingWizard', () => {
     await user.click(prevButton)
     
     await waitFor(() => {
-      expect(screen.getByText(/Bienvenido a Pomodoro/i)).toBeInTheDocument()
+      expect(screen.getByText(/Bienvenido a POMO/i)).toBeInTheDocument()
     })
   })
 
@@ -93,7 +93,7 @@ describe('OnboardingWizard', () => {
     render(<OnboardingWizard />)
     
     await waitFor(() => {
-      expect(screen.queryByText(/Bienvenido a Pomodoro/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/Bienvenido a POMO/i)).not.toBeInTheDocument()
     })
   })
 })

@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -7,19 +7,7 @@ import { Header } from './components/Header.tsx'
 import { OnboardingWizard } from './components/OnboardingWizard.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { ThemedBackdrop } from './components/ThemedBackdrop.tsx'
-import { useAppStore } from './context/AppContext.tsx'
-
-function DarkModeInit() {
-  const darkMode = useAppStore((s) => s.darkMode)
-  const theme = useAppStore((s) => s.theme)
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode)
-  }, [darkMode])
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
-  return null
-}
+import { DarkModeInit } from './components/DarkModeInit.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

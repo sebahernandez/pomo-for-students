@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { IconCookie } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 
@@ -19,14 +19,7 @@ const COOKIE_CONSENT_KEY = 'pomo-cookie-consent'
 
 export function CookieConsentBanner() {
   const { language } = useAppStore()
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const hasConsented = getCookie(COOKIE_CONSENT_KEY)
-    if (!hasConsented) {
-      setIsVisible(true)
-    }
-  }, [])
+  const [isVisible, setIsVisible] = useState(() => !getCookie(COOKIE_CONSENT_KEY))
 
   const handleAccept = () => {
     setCookie(COOKIE_CONSENT_KEY, 'accepted')
