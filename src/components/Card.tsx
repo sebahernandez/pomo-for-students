@@ -16,6 +16,15 @@ const STATUS_ICONS: Record<TaskStatus, React.ReactNode> = {
   done: <IconCircleCheck size={12} />,
 }
 
+// Mezcla un color de acento del tema sobre una base opaca del modo (blanco/oscuro)
+// a baja proporción → superficie sólida, teñida por el tema y con contraste determinista.
+const tint = (hex: string, base: [number, number, number], ratio: number): string => {
+  const n = hex.replace('#', '')
+  const c = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16))
+  const mix = (fg: number, bg: number) => Math.round(fg * ratio + bg * (1 - ratio))
+  return `rgb(${mix(c[0], base[0])}, ${mix(c[1], base[1])}, ${mix(c[2], base[2])})`
+}
+
 interface CardProps {
   task: Task
 }
@@ -34,16 +43,26 @@ export function Card({ task }: CardProps) {
 
   const themeColors = useThemeColors()
   const t = useTranslations(language)
-  
+
   const isActive = task.id === activeTaskId
   const isRunning = isActive && timerStatus === 'running'
   const nextStatus = NEXT_STATUS[task.status]
-  const textPrimary = darkMode ? 'text-neutral-200' : 'text-neutral-800'
-  const textSecondary = darkMode ? 'text-neutral-300' : 'text-neutral-600'
-  const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400'
-  const bgLight = darkMode ? 'bg-white/[0.05]' : 'bg-black/[0.04]'
-  const bgLightHover = darkMode ? 'hover:bg-white/[0.1]' : 'hover:bg-black/[0.08]'
-  const borderLight = darkMode ? 'border-white/[0.08]' : 'border-black/[0.08]'
+
+  // Superficie sólida teñida por el tema; el texto se ata al modo para garantizar contraste.
+  const modeBase: [number, number, number] = darkMode ? [28, 28, 30] : [255, 255, 255]
+  const cardSurface = isActive
+    ? tint(themeColors.primary, modeBase, darkMode ? 0.16 : 0.1)
+    : tint(themeColors.secondary, modeBase, darkMode ? 0.07 : 0.05)
+  const cardBorder = isActive ? themeColors.primary : `${themeColors.secondary}40`
+  const cardShadow = isActive
+    ? `0 0 0 1.5px ${themeColors.primary}, 0 6px 16px ${themeColors.primary}22`
+    : 'none'
+
+  const colorTitle = darkMode ? '#f1f5f9' : '#1f2937'
+  const colorSecondary = darkMode ? '#cbd5e1' : '#475569'
+  const colorMuted = darkMode ? '#adb7c6' : '#556070'
+  const subtleBg = darkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'
+
   const [showFocusInput, setShowFocusInput] = useState(false)
   const [focusInput, setFocusInput] = useState(task.focusTime?.toString() ?? '')
 
@@ -95,26 +114,28 @@ export function Card({ task }: CardProps) {
   const remainingTime = isActive && task.timeLeft !== null ? formatTime(task.timeLeft) : null
 
   return (
-      <div className={`group rounded-lg transition-all duration-200 cursor-pointer ${
-        isActive
-          ? 'bg-neutral-900 dark:bg-white/[0.14] border-2 border-neutral-900/30 dark:border-white/30 shadow-lg shadow-neutral-900/10 dark:shadow-white/10'
-          : 'bg-black dark:bg-white border border-black dark:border-white hover:bg-black dark:hover:bg-white'
-      }`}
+      <div
+        className="group rounded-lg transition-all duration-200 cursor-pointer"
+        style={{
+          background: cardSurface,
+          border: `1px solid ${cardBorder}`,
+          boxShadow: cardShadow,
+        }}
       onClick={() => { if (task.status === 'doing') switchActiveTask(task.id); }}>
       <div className="p-2.5">
         {/* Header: icon + title + delete */}
         <div className="flex items-start gap-2">
-          <span className={`${isActive ? textSecondary : textMuted} shrink-0 mt-0.5`}>{STATUS_ICONS[task.status]}</span>
+          <span className="shrink-0 mt-0.5" style={{ color: isActive ? themeColors.secondary : colorMuted }}>{STATUS_ICONS[task.status]}</span>
           <div className="flex-1 min-w-0">
-            <p className={`text-sm font-medium ${textPrimary} leading-snug wrap-break-word`} style={{overflowWrap: 'anywhere'}}>{task.title}</p>
+            <p className="text-sm font-medium leading-snug wrap-break-word" style={{ color: colorTitle, overflowWrap: 'anywhere' }}>{task.title}</p>
             <div className="flex items-center gap-3 mt-1">
               {task.pomodorosCompleted > 0 && (
-                <span className={`inline-flex items-center gap-0.5 text-xs ${textMuted}`}>
+                <span className="inline-flex items-center gap-0.5 text-xs" style={{ color: colorMuted }}>
                   <IconFlame size={10} /> {task.pomodorosCompleted}
                 </span>
               )}
               {isActive && remainingTime && (
-                <span className={`inline-flex items-center gap-0.5 text-xs font-mono ${textSecondary}`}>
+                <span className="inline-flex items-center gap-0.5 text-xs font-mono" style={{ color: colorSecondary }}>
                   <IconClock size={10} /> {remainingTime}
                 </span>
               )}
@@ -123,7 +144,8 @@ export function Card({ task }: CardProps) {
           <button
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => removeTask(task.id)}
-            className={`text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ${darkMode ? 'text-neutral-600 hover:text-neutral-400' : 'text-neutral-400 hover:text-neutral-600'}`}
+            className="text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+            style={{ color: colorMuted }}
             title="Remove task"
           >
             <IconX size={14} />
@@ -131,12 +153,13 @@ export function Card({ task }: CardProps) {
         </div>
 
         {/* Actions row */}
-        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/4 dark:border-white/4" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
+        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t" style={{ borderColor: `${themeColors.secondary}22` }} onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
           {/* Status button */}
           <button
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => { e.stopPropagation(); moveTask(task.id, nextStatus); }}
-            className={`text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0 ${bgLight} ${textMuted} ${bgLightHover}`}
+            className="text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0"
+            style={{ backgroundColor: subtleBg, color: colorMuted }}
           >
             {STATUS_ICONS[task.status]} {statusLabels[task.status]}
           </button>
@@ -146,12 +169,10 @@ export function Card({ task }: CardProps) {
             <button
               onClick={handleToggleFocus}
               onPointerDown={(e) => e.stopPropagation()}
-              className={`text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0 ${
-                isActive
-                  ? 'text-white dark:text-neutral-900'
-                  : 'bg-black/4 dark:bg-white/5 text-neutral-700 dark:text-neutral-200 hover:bg-black/8 dark:hover:bg-white/10'
-              }`}
-              style={isActive ? { backgroundColor: themeColors.primary } : {}}
+              className="text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0"
+              style={isActive
+                ? { backgroundColor: themeColors.primary, color: themeColors.gradientEnd }
+                : { backgroundColor: subtleBg, color: colorSecondary }}
             >
               {isActive ? (
                 isRunning ? (
@@ -177,7 +198,8 @@ export function Card({ task }: CardProps) {
                     value={focusInput}
                     onChange={(e) => setFocusInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleSaveFocusTime(); if (e.key === 'Escape') setShowFocusInput(false); }}
-                    className={`flex-1 text-xs px-1 py-1.5 rounded-md border ${borderLight} focus:outline-none focus:border-neutral-400 text-center ${textPrimary}`}
+                    className="flex-1 text-xs px-1 py-1.5 rounded-md border focus:outline-none text-center"
+                    style={{ borderColor: `${themeColors.secondary}40`, color: colorTitle }}
                     autoFocus
                     placeholder="min"
                   />
@@ -192,7 +214,8 @@ export function Card({ task }: CardProps) {
               ) : (
                 <button
                   onClick={() => { setShowFocusInput(true); setFocusInput(task.focusTime?.toString() ?? ''); }}
-                  className={`text-xs px-2 py-1.5 rounded-md transition-colors inline-flex items-center justify-center gap-1 w-full ${bgLight} ${textMuted} ${bgLightHover}`}
+                  className="text-xs px-2 py-1.5 rounded-md transition-colors inline-flex items-center justify-center gap-1 w-full"
+                  style={{ backgroundColor: subtleBg, color: colorMuted }}
                   title="Set focus time"
                 >
                   <IconClock size={11} /> {task.focusTime ?? '—'} min
