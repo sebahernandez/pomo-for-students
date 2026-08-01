@@ -17,7 +17,6 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     updateSettings(form)
-    onClose()
   }
 
   return (

@@ -64,6 +64,27 @@ describe('Panels presented as drawers', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
+  it('SettingsPanel stays open after saving (apply does not close)', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    render(<SettingsPanel onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    // Applying the change must NOT close the drawer.
+    expect(onClose).not.toHaveBeenCalled()
+    expect(screen.getByRole('dialog', { name: 'Configuración' })).toBeInTheDocument()
+  })
+
+  it('SettingsPanel closes when Cancel is clicked', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    render(<SettingsPanel onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
   it('SessionHistory opens as a drawer and closes via the close button', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
