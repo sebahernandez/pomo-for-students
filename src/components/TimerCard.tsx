@@ -34,7 +34,11 @@ export function TimerCard() {
   const seconds = timeLeft % 60
   const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
-  const modeLabel = timerMode === 'work' ? t.focusTime : timerMode === 'shortBreak' ? t.shortBreakLabel : t.longBreakLabel
+  const modes = [
+    { key: 'work' as const, label: t.focus },
+    { key: 'shortBreak' as const, label: t.shortBreak },
+    { key: 'longBreak' as const, label: t.longBreak },
+  ]
 
   const activeTask = tasks.find((t) => t.id === activeTaskId)
   const settings = useAppStore.getState().settings
@@ -98,16 +102,29 @@ export function TimerCard() {
       }}
     >
       <div className="p-8">
-        <div className="text-center mb-6">
-          <span 
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
-            style={{ 
-              backgroundColor: themeColors.primary, 
-              color: themeColors.gradientEnd 
-            }}
-          >
-            {modeLabel}
-          </span>
+        <div className="flex justify-center gap-2 mb-6" role="tablist">
+          {modes.map((mode) => {
+            const isActive = timerMode === mode.key
+            return (
+              <button
+                key={mode.key}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setTimerMode(mode.key)}
+                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+                style={
+                  isActive
+                    ? { backgroundColor: themeColors.primary, color: themeColors.gradientEnd }
+                    : {
+                        backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                        color: darkMode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)',
+                      }
+                }
+              >
+                {mode.label}
+              </button>
+            )
+          })}
         </div>
 
         <div className="text-center mb-4 h-6 flex items-center justify-center">
@@ -118,7 +135,7 @@ export function TimerCard() {
           )}
         </div>
 
-        <div className="relative w-80 h-80 sm:w-96 sm:h-96 mx-auto mb-8 p-6">
+        <div key={timerMode} className="relative w-80 h-80 sm:w-96 sm:h-96 mx-auto mb-8 p-6 animate-mode-switch">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 260 260" style={{overflow: 'visible'}}>
             <circle
               cx="130" cy="130" r="120"

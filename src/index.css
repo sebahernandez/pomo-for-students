@@ -310,15 +310,22 @@ html.dark {
   to { transform: translateX(0); }
 }
 
+@keyframes mode-switch {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-fade-in { animation: fade-in 0.4s ease-out; }
 .animate-slide-down { animation: slide-down 0.3s ease-out; }
 .animate-slide-up { animation: slide-up 0.3s ease-out; }
 .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+.animate-mode-switch { animation: mode-switch 0.35s ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-slide-in-right { animation: fade-in 0.2s ease-out; }
+  .animate-mode-switch { animation: none; }
 }
 
 .btn-primary {
