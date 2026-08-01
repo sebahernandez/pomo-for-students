@@ -57,8 +57,10 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
       return acc
     }, {} as Settings)
     updateSettings(normalized)
-    // Reflect the persisted, normalized values back into the inputs.
+    // Reflect the persisted, normalized values back into the inputs, then close
+    // the drawer to confirm the save completed.
     setForm(toFormState(normalized))
+    onClose()
   }
 
   return (

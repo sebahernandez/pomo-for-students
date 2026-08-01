@@ -65,16 +65,15 @@ describe('Panels presented as drawers', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('SettingsPanel stays open after saving (apply does not close)', async () => {
+  it('SettingsPanel closes after saving', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
     render(<SettingsPanel onClose={onClose} />)
 
     await user.click(screen.getByRole('button', { name: 'Guardar' }))
 
-    // Applying the change must NOT close the drawer.
-    expect(onClose).not.toHaveBeenCalled()
-    expect(screen.getByRole('dialog', { name: 'Configuración' })).toBeInTheDocument()
+    // Saving applies the change and closes the drawer.
+    expect(onClose).toHaveBeenCalledTimes(1)
   })
 
   it('SettingsPanel closes when Cancel is clicked', async () => {
@@ -115,7 +114,7 @@ describe('Panels presented as drawers', () => {
     expect(workInput.value).toBe('60')
   })
 
-  it('SettingsPanel persists valid values and keeps the drawer open on save', async () => {
+  it('SettingsPanel persists valid values and closes the drawer on save', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
     useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
@@ -130,8 +129,8 @@ describe('Panels presented as drawers', () => {
     expect(state.settings.work).toBe(30)
     // Saving reloads the current mode timer (work) to the new duration in seconds.
     expect(state.timeLeft).toBe(30 * 60)
-    expect(onClose).not.toHaveBeenCalled()
-    expect(screen.getByRole('dialog', { name: 'Configuración' })).toBeInTheDocument()
+    // Saving closes the drawer.
+    expect(onClose).toHaveBeenCalledTimes(1)
   })
 
   it('SessionHistory opens as a drawer and closes via the close button', async () => {
