@@ -8,10 +8,12 @@ import { OnboardingWizard } from './components/OnboardingWizard.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { ThemedBackdrop } from './components/ThemedBackdrop.tsx'
 import { DarkModeInit } from './components/DarkModeInit.tsx'
+import { Analytics } from '@vercel/analytics/react'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DarkModeInit />
+    <Analytics />
     <ThemedBackdrop />
     <OnboardingWizard />
     <CookieConsentBanner />
