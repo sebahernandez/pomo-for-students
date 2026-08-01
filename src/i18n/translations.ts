@@ -45,6 +45,9 @@ export const translations = {
     lightMode: 'Light Mode',
     darkMode: 'Dark Mode',
     language: 'Language',
+    guide: 'User Guide',
+    tools: 'Tools',
+    menu: 'Menu',
     footer: 'Pomo Study — Focus better, one pomodoro at a time',
   },
   es: {
@@ -93,6 +96,9 @@ export const translations = {
     lightMode: 'Modo Claro',
     darkMode: 'Modo Oscuro',
     language: 'Idioma',
+    guide: 'Guía de Uso',
+    tools: 'Herramientas',
+    menu: 'Menú',
     footer: 'Pomo Study — Enfócate mejor, un pomodoro a la vez',
   },
 }
