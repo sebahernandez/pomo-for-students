@@ -7,7 +7,7 @@ const ONBOARDED_KEY = 'pomo-onboarded'
 const wizardContent = {
   es: [
     {
-      title: 'Bienvenido a Pomodoro For Students',
+      title: 'Bienvenido a POMO FOR STUDY',
       subtitle: 'Organiza tu estudio, un pomodoro a la vez',
       icon: <IconPlayerPlay size={48} />,
       description: 'Una herramienta simple y elegante para gestionar tu tiempo de estudio con la técnica Pomodoro y un tablero de tareas integrado.',
@@ -39,7 +39,7 @@ const wizardContent = {
   ],
   en: [
     {
-      title: 'Welcome to Pomodoro For Students',
+      title: 'Welcome to POMO FOR STUDY',
       subtitle: 'Organize your study, one pomodoro at a time',
       icon: <IconPlayerPlay size={48} />,
       description: 'A simple and elegant tool to manage your study time with the Pomodoro technique and an integrated task board.',

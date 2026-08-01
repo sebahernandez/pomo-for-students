@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { IconX, IconFlame, IconTarget, IconCircleDashed, IconCircleCheck, IconPlayerPlay, IconPlayerPause, IconClock } from '@tabler/icons-react'
 import { useAppStore, type Task, type TaskStatus } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
@@ -47,9 +47,13 @@ export function Card({ task }: CardProps) {
   const [showFocusInput, setShowFocusInput] = useState(false)
   const [focusInput, setFocusInput] = useState(task.focusTime?.toString() ?? '')
 
-  useEffect(() => {
+  // Re-sincroniza el input cuando cambia task.focusTime, ajustando el estado
+  // durante el render en lugar de un efecto (evita renders en cascada).
+  const [prevFocusTime, setPrevFocusTime] = useState(task.focusTime)
+  if (task.focusTime !== prevFocusTime) {
+    setPrevFocusTime(task.focusTime)
     setFocusInput(task.focusTime?.toString() ?? '')
-  }, [task.focusTime])
+  }
 
   const handleToggleFocus = () => {
     if (isActive) {
@@ -93,16 +97,16 @@ export function Card({ task }: CardProps) {
   return (
       <div className={`group rounded-lg transition-all duration-200 cursor-pointer ${
         isActive
-          ? 'bg-neutral-900/[0.12] dark:bg-white/[0.14] border-2 border-neutral-900/30 dark:border-white/30 shadow-lg shadow-neutral-900/10 dark:shadow-white/10'
-          : 'bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] hover:bg-black/[0.05] dark:hover:bg-white/[0.05]'
+          ? 'bg-neutral-900 dark:bg-white/[0.14] border-2 border-neutral-900/30 dark:border-white/30 shadow-lg shadow-neutral-900/10 dark:shadow-white/10'
+          : 'bg-black dark:bg-white border border-black dark:border-white hover:bg-black dark:hover:bg-white'
       }`}
       onClick={() => { if (task.status === 'doing') switchActiveTask(task.id); }}>
       <div className="p-2.5">
         {/* Header: icon + title + delete */}
         <div className="flex items-start gap-2">
-          <span className={`${isActive ? textSecondary : textMuted} flex-shrink-0 mt-0.5`}>{STATUS_ICONS[task.status]}</span>
+          <span className={`${isActive ? textSecondary : textMuted} shrink-0 mt-0.5`}>{STATUS_ICONS[task.status]}</span>
           <div className="flex-1 min-w-0">
-            <p className={`text-sm font-medium ${textPrimary} leading-snug break-words`} style={{overflowWrap: 'anywhere'}}>{task.title}</p>
+            <p className={`text-sm font-medium ${textPrimary} leading-snug wrap-break-word`} style={{overflowWrap: 'anywhere'}}>{task.title}</p>
             <div className="flex items-center gap-3 mt-1">
               {task.pomodorosCompleted > 0 && (
                 <span className={`inline-flex items-center gap-0.5 text-xs ${textMuted}`}>
@@ -119,7 +123,7 @@ export function Card({ task }: CardProps) {
           <button
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => removeTask(task.id)}
-            className={`text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ${darkMode ? 'text-neutral-600 hover:text-neutral-400' : 'text-neutral-400 hover:text-neutral-600'}`}
+            className={`text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ${darkMode ? 'text-neutral-600 hover:text-neutral-400' : 'text-neutral-400 hover:text-neutral-600'}`}
             title="Remove task"
           >
             <IconX size={14} />
@@ -127,7 +131,7 @@ export function Card({ task }: CardProps) {
         </div>
 
         {/* Actions row */}
-        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/[0.04] dark:border-white/[0.04]" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
+        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pt-2 border-t border-black/4 dark:border-white/4" onClick={(e) => e.stopPropagation()} onPointerDown={(e) => e.stopPropagation()}>
           {/* Status button */}
           <button
             onPointerDown={(e) => e.stopPropagation()}
@@ -145,7 +149,7 @@ export function Card({ task }: CardProps) {
               className={`text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0 ${
                 isActive
                   ? 'text-white dark:text-neutral-900'
-                  : 'bg-black/[0.04] dark:bg-white/[0.05] text-neutral-700 dark:text-neutral-200 hover:bg-black/[0.08] dark:hover:bg-white/[0.1]'
+                  : 'bg-black/4 dark:bg-white/5 text-neutral-700 dark:text-neutral-200 hover:bg-black/8 dark:hover:bg-white/10'
               }`}
               style={isActive ? { backgroundColor: themeColors.primary } : {}}
             >

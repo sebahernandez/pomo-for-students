@@ -9,7 +9,7 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-neutral-400 dark:text-neutral-200">
-              Pomodoro for students, by Kreadium.cl
+              pomoforstudy.com, by Kreadium.cl
             </span>
             <span className="text-xs text-neutral-300 dark:text-neutral-200">© 2026</span>
           </div>
