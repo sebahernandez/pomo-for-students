@@ -133,6 +133,101 @@ describe('Panels presented as drawers', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
+  it('SettingsPanel blocks passive close and warns when there are unsaved changes', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={onClose} />)
+
+    const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
+    await user.clear(workInput)
+    await user.type(workInput, '40')
+
+    // Escape must not close the drawer while there are unsaved changes.
+    await user.keyboard('{Escape}')
+    expect(onClose).not.toHaveBeenCalled()
+    expect(screen.getByRole('alert')).toHaveTextContent(/cambios sin guardar/i)
+
+    // The X close button is likewise guarded.
+    await user.click(screen.getByRole('button', { name: /close/i }))
+    expect(onClose).not.toHaveBeenCalled()
+
+    // The scrim is likewise guarded.
+    const scrim = screen.getByRole('dialog').parentElement as HTMLElement
+    await user.click(scrim)
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it('SettingsPanel closes via scrim when there are no unsaved changes', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={onClose} />)
+
+    const scrim = screen.getByRole('dialog').parentElement as HTMLElement
+    await user.click(scrim)
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('SettingsPanel cancels and discards when there are unsaved changes', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    render(<SettingsPanel onClose={onClose} />)
+
+    const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
+    await user.clear(workInput)
+    await user.type(workInput, '40')
+
+    // Cancel bypasses the guard and exits without persisting the edit.
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(useAppStore.getState().settings.work).toBe(25)
+  })
+
+  it('SettingsPanel treats a theme change as unsaved and blocks passive close', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ theme: 'neutral' })
+    render(<SettingsPanel onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: /ocean/i }))
+    expect(useAppStore.getState().theme).toBe('ocean')
+
+    // Escape must not close the drawer after a live theme change.
+    await user.keyboard('{Escape}')
+    expect(onClose).not.toHaveBeenCalled()
+    expect(screen.getByRole('alert')).toHaveTextContent(/cambios sin guardar/i)
+  })
+
+  it('SettingsPanel reverts the previewed theme when Cancel is clicked', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ theme: 'neutral' })
+    render(<SettingsPanel onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: /ocean/i }))
+    expect(useAppStore.getState().theme).toBe('ocean')
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onClose).toHaveBeenCalledTimes(1)
+    // Cancel discards the preview, restoring the theme active when the panel opened.
+    expect(useAppStore.getState().theme).toBe('neutral')
+  })
+
+  it('SettingsPanel keeps the selected theme when saving', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    useAppStore.setState({ theme: 'neutral' })
+    render(<SettingsPanel onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: /ocean/i }))
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(useAppStore.getState().theme).toBe('ocean')
+  })
+
   it('SessionHistory opens as a drawer and closes via the close button', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()

@@ -46,9 +46,18 @@ const toFormState = (settings: Settings): FormState =>
   }, {} as FormState)
 
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
-  const { settings, updateSettings, language } = useAppStore()
+  const { settings, updateSettings, language, theme, setTheme } = useAppStore()
   const t = useTranslations(language)
   const [form, setForm] = useState<FormState>(() => toFormState(settings))
+  const [showWarning, setShowWarning] = useState(false)
+  // Theme applies as a live preview; remember the one active when the panel
+  // opened so a theme change counts as unsaved and Cancel can revert it.
+  const [baselineTheme] = useState(theme)
+
+  // There are unsaved changes when any field differs from the persisted config
+  // or the theme has been changed since the panel opened.
+  const isDirty =
+    FIELDS.some(({ key }) => form[key] !== String(settings[key])) || theme !== baselineTheme
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,22 +67,39 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
     }, {} as Settings)
     updateSettings(normalized)
     // Reflect the persisted, normalized values back into the inputs, then close
-    // the drawer to confirm the save completed.
+    // the drawer to confirm the save completed. The previewed theme is kept.
     setForm(toFormState(normalized))
+    onClose()
+  }
+
+  // Cancel discards unsaved edits: revert the previewed theme to the baseline
+  // before closing. Bypasses the unsaved-changes guard.
+  const handleCancel = () => {
+    if (theme !== baselineTheme) setTheme(baselineTheme)
+    onClose()
+  }
+
+  // Guard the passive close mechanisms (scrim, Escape, X): with unsaved changes,
+  // warn the user instead of discarding. Save and Cancel bypass this guard.
+  const attemptClose = () => {
+    if (isDirty) {
+      setShowWarning(true)
+      return
+    }
     onClose()
   }
 
   return (
     <Drawer
-      onClose={onClose}
+      onClose={attemptClose}
       title={t.settings}
-      icon={<IconSettings size={20} className="text-neutral-500 dark:text-neutral-400" />}
+      icon={<IconSettings size={20} className="text-theme-muted" />}
       maxWidthClass="max-w-sm"
     >
       <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-4 pr-1">
         {FIELDS.map(({ key, icon, label }) => (
           <div key={key}>
-            <label htmlFor={`setting-${key}`} className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider inline-flex items-center gap-1.5">
+            <label htmlFor={`setting-${key}`} className="block text-xs font-medium text-theme-muted mb-1.5 uppercase tracking-wider inline-flex items-center gap-1.5">
               {icon} {label(t)}
             </label>
             <input
@@ -81,17 +107,25 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               type="text"
               inputMode="numeric"
               value={form[key]}
-              onChange={(e) => setForm((prev) => ({ ...prev, [key]: e.target.value }))}
+              onChange={(e) => {
+                setShowWarning(false)
+                setForm((prev) => ({ ...prev, [key]: e.target.value }))
+              }}
               className="input-glass"
             />
           </div>
         ))}
         <ThemeSelector />
+        {showWarning && (
+          <p role="alert" className="text-xs text-amber-600 dark:text-amber-400">
+            {t.unsavedChanges}
+          </p>
+        )}
         <div className="flex gap-2 pt-2">
           <button type="submit" className="btn-primary flex-1">
             {t.save}
           </button>
-          <button type="button" onClick={onClose} className="btn-secondary flex-1">
+          <button type="button" onClick={handleCancel} className="btn-secondary flex-1">
             {t.cancel}
           </button>
         </div>

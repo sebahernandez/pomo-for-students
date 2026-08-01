@@ -9,7 +9,7 @@ export function ThemeSelector() {
 
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider inline-flex items-center gap-1.5">
+      <label className="block text-xs font-medium text-theme-muted uppercase tracking-wider inline-flex items-center gap-1.5">
         <IconPalette size={12} /> {language === 'es' ? 'Tema' : 'Theme'}
       </label>
       <div className="grid grid-cols-3 gap-2">
@@ -19,6 +19,7 @@ export function ThemeSelector() {
           return (
             <button
               key={themeName}
+              type="button"
               onClick={() => setTheme(themeName)}
               className={`relative p-2.5 rounded-xl border-2 transition-all ${
                 isSelected

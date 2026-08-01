@@ -92,7 +92,7 @@ export function OnboardingWizard() {
         <div className="flex justify-end p-4 pb-0">
           <button
             onClick={handleClose}
-            className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+            className="text-theme-muted hover:text-theme-secondary transition-colors"
           >
             <IconX size={20} />
           </button>
@@ -110,10 +110,10 @@ export function OnboardingWizard() {
             <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
               {current.title}
             </h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            <p className="text-sm text-theme-muted mb-4">
               {current.subtitle}
             </p>
-            <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            <p className="text-sm text-theme-secondary leading-relaxed">
               {current.description}
             </p>
           </div>
@@ -124,7 +124,7 @@ export function OnboardingWizard() {
               <div className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
                 <div className="flex items-center gap-2">
                   {darkMode ? <IconMoon size={16} /> : <IconSun size={16} />}
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <span className="text-sm text-theme-secondary">
                     {language === 'es' ? 'Modo oscuro' : 'Dark mode'}
                   </span>
                 </div>
@@ -137,10 +137,10 @@ export function OnboardingWizard() {
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-mono text-neutral-700 dark:text-neutral-300">
+                  <span className="text-sm font-mono text-theme-secondary">
                     {language.toUpperCase()}
                   </span>
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <span className="text-sm text-theme-secondary">
                     {language === 'es' ? 'Idioma' : 'Language'}
                   </span>
                 </div>
@@ -159,7 +159,7 @@ export function OnboardingWizard() {
             <button
               onClick={() => setStep((s) => Math.max(0, s - 1))}
               disabled={step === 0}
-              className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+              className="flex items-center gap-1 text-sm text-theme-muted disabled:opacity-30 disabled:cursor-not-allowed hover:text-theme-secondary transition-colors"
             >
               <IconChevronLeft size={16} />
               {language === 'es' ? 'Anterior' : 'Back'}
@@ -191,7 +191,7 @@ export function OnboardingWizard() {
             ) : (
               <button
                 onClick={() => setStep((s) => Math.min(content.length - 1, s + 1))}
-                className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+                className="flex items-center gap-1 text-sm text-theme-muted hover:text-theme-secondary transition-colors"
               >
                 {language === 'es' ? 'Siguiente' : 'Next'}
                 <IconChevronRight size={16} />

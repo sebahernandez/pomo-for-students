@@ -48,7 +48,7 @@ export function DroppableColumn({ col, tasks, isOver, emptyLabel, accentColor, d
         <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
           {tasks.length === 0 && !isOver && (
             <div className="flex items-center justify-center py-6">
-              <span className="text-xs text-neutral-300 dark:text-neutral-600">{emptyLabel}</span>
+              <span className="text-xs text-theme-muted">{emptyLabel}</span>
             </div>
           )}
           {tasks.map((task) => (

@@ -39,7 +39,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
     <Drawer
       onClose={onClose}
       title={language === 'es' ? 'Guía de Uso' : 'User Guide'}
-      icon={<IconBook size={20} className="text-neutral-500 dark:text-neutral-400" />}
+      icon={<IconBook size={20} className="text-theme-muted" />}
       maxWidthClass="max-w-lg"
     >
       <div className="flex-1 overflow-y-auto pr-1 space-y-4">
@@ -49,15 +49,15 @@ export function GuideModal({ onClose }: GuideModalProps) {
               {step.icon}
             </div>
             <div className="flex-1 pt-1">
-              <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{step.title}</h3>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">{step.desc}</p>
+              <h3 className="text-sm font-semibold text-theme-secondary">{step.title}</h3>
+              <p className="text-xs text-theme-muted mt-0.5 leading-relaxed">{step.desc}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
-        <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
+        <div className="flex items-center justify-between text-xs text-theme-muted">
           <span>{language === 'es' ? 'Tip: Cada tarea tiene su propio temporizador independiente.' : 'Tip: Each task has its own independent timer.'}</span>
           <button onClick={onClose} className="btn-primary">
             {t.close}

@@ -40,7 +40,7 @@ export function Drawer({ onClose, title, icon, maxWidthClass = 'max-w-md', child
             <button
               onClick={onClose}
               aria-label="Close"
-              className="text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+              className="text-theme-muted hover:text-theme-secondary transition-colors"
             >
               <IconX size={20} />
             </button>

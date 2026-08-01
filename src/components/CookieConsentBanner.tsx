@@ -44,7 +44,7 @@ export function CookieConsentBanner() {
             <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {language === 'es' ? 'Utilizamos cookies' : 'We use cookies'}
             </p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+            <p className="text-xs text-theme-muted">
               {language === 'es'
                 ? 'Este sitio usa cookies para mejorar tu experiencia.'
                 : 'This site uses cookies to improve your experience.'}
@@ -54,7 +54,7 @@ export function CookieConsentBanner() {
         <div className="flex gap-2 flex-shrink-0">
           <button
             onClick={handleReject}
-            className="px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-theme-secondary hover:text-[var(--theme-primary)] transition-colors"
           >
             {language === 'es' ? 'Rechazar' : 'Reject'}
           </button>
