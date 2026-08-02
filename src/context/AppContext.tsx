@@ -34,6 +34,7 @@ interface AppState {
   timerMode: TimerMode
   timerStatus: TimerStatus
   timeLeft: number
+  breakTimeLeft: number
   sessionsCompleted: number
   activeTaskId: string | null
   settings: Settings
@@ -47,10 +48,12 @@ interface AppState {
   setTimerMode: (mode: TimerMode) => void
   setTimerStatus: (status: TimerStatus) => void
   setTimeLeft: (time: number) => void
+  setBreakTimeLeft: (time: number) => void
   startTimer: () => void
   pauseTimer: () => void
   resetTimer: () => void
   toggleFocus: () => void
+  takeShortBreak: () => void
   incrementSessions: () => void
   setActiveTask: (id: string | null) => void
   switchActiveTask: (id: string) => void
@@ -93,6 +96,14 @@ const getDurations = (settings: Settings): Record<TimerMode, number> => ({
   longBreak: settings.longBreak * 60,
 })
 
+// Variación de fondo por modo de descanso; se aplica al <html>.
+const applyModeClasses = (mode: TimerMode) => {
+  if (typeof window === 'undefined') return
+  document.documentElement.classList.remove('mode-shortBreak', 'mode-longBreak')
+  if (mode === 'shortBreak') document.documentElement.classList.add('mode-shortBreak')
+  if (mode === 'longBreak') document.documentElement.classList.add('mode-longBreak')
+}
+
 const loadTasks = (): Task[] => {
   try {
     const stored = localStorage.getItem('pomo-tasks')
@@ -126,6 +137,7 @@ export const useAppStore = create<AppState>((set) => {
   timerMode: 'work',
   timerStatus: 'idle',
   timeLeft: durations.work,
+  breakTimeLeft: durations.shortBreak,
   sessionsCompleted: 0,
   activeTaskId: null,
   settings,
@@ -139,17 +151,20 @@ export const useAppStore = create<AppState>((set) => {
   setTimerMode: (mode) =>
     set((state) => {
       const d = getDurations(state.settings)
-      if (typeof window !== 'undefined') {
-        document.documentElement.classList.remove('mode-shortBreak', 'mode-longBreak')
-        if (mode === 'shortBreak') document.documentElement.classList.add('mode-shortBreak')
-        if (mode === 'longBreak') document.documentElement.classList.add('mode-longBreak')
+      applyModeClasses(mode)
+      // Enfoque conserva su cuenta (el tiempo de la tarea activa); los descansos
+      // usan su propia cuenta y parten llenos al (re)entrar. Nunca se cruzan.
+      if (mode === 'work') {
+        return { timerMode: mode, timerStatus: 'idle' }
       }
-      return { timerMode: mode, timeLeft: d[mode], timerStatus: 'idle' }
+      return { timerMode: mode, breakTimeLeft: d[mode], timerStatus: 'idle' }
     }),
 
   setTimerStatus: (status) => set({ timerStatus: status }),
 
   setTimeLeft: (time) => set({ timeLeft: time }),
+
+  setBreakTimeLeft: (time) => set({ breakTimeLeft: time }),
 
   // El modo Enfoque solo puede correr con una tarea activa; los descansos son libres.
   startTimer: () =>
@@ -169,6 +184,15 @@ export const useAppStore = create<AppState>((set) => {
       return { timerStatus: 'running' }
     }),
 
+  // Atajo desde la tarjeta: inicia un Descanso Corto aislado, sin tocar el tiempo
+  // de Enfoque ni el de ninguna tarea.
+  takeShortBreak: () =>
+    set((state) => {
+      const d = getDurations(state.settings)
+      applyModeClasses('shortBreak')
+      return { timerMode: 'shortBreak', breakTimeLeft: d.shortBreak, timerStatus: 'running' }
+    }),
+
   resetTimer: () =>
     set((state) => {
       // En Enfoque con tarea activa, reiniciar vuelve a la duración de esa tarea y
@@ -183,9 +207,13 @@ export const useAppStore = create<AppState>((set) => {
         saveTasks(tasks)
         return { timeLeft: newTimeLeft, timerStatus: 'idle', tasks }
       }
-      // Descansos o Enfoque sin tarea activa: comportamiento previo, sin tocar tareas.
+      // Descanso: reinicia solo su cuenta propia, sin tocar Enfoque ni tareas.
       const d = getDurations(state.settings)
-      return { timeLeft: d[state.timerMode], timerStatus: 'idle' }
+      if (state.timerMode !== 'work') {
+        return { breakTimeLeft: d[state.timerMode], timerStatus: 'idle' }
+      }
+      // Enfoque sin tarea activa: comportamiento previo.
+      return { timeLeft: d.work, timerStatus: 'idle' }
     }),
 
   incrementSessions: () =>
@@ -243,6 +271,8 @@ export const useAppStore = create<AppState>((set) => {
 
   saveTaskTime: () =>
     set((state) => {
+      // Solo el Enfoque persiste tiempo en la tarea; los descansos no tocan tareas.
+      if (state.timerMode !== 'work') return {}
       if (!state.activeTaskId) return {}
       const tasks = state.tasks.map((t) =>
         t.id === state.activeTaskId ? { ...t, timeLeft: state.timeLeft } : t

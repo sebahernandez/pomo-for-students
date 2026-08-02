@@ -10,6 +10,7 @@ export function TimerCard() {
     timerMode,
     timerStatus,
     timeLeft,
+    breakTimeLeft,
     sessionsCompleted,
     activeTaskId,
     tasks,
@@ -18,6 +19,7 @@ export function TimerCard() {
     toggleFocus,
     setTimerMode,
     setTimeLeft,
+    setBreakTimeLeft,
     setTaskFocusTime,
     language,
     darkMode,
@@ -31,8 +33,11 @@ export function TimerCard() {
   const inputRef = useRef<HTMLInputElement>(null)
 
 
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
+  // Enfoque y descanso tienen cuentas independientes; se muestra la del modo actual.
+  const isBreak = timerMode !== 'work'
+  const shownTime = isBreak ? breakTimeLeft : timeLeft
+  const minutes = Math.floor(shownTime / 60)
+  const seconds = shownTime % 60
   const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
   const modes = [
@@ -46,10 +51,14 @@ export function TimerCard() {
   // Los descansos siguen siendo libres.
   const focusLocked = timerMode === 'work' && !activeTask
   const settings = useAppStore.getState().settings
-  const totalSeconds = activeTask?.focusTime
-    ? activeTask.focusTime * 60
-    : settings[timerMode] * 60
-  const progress = timerStatus === 'idle' ? 0 : ((totalSeconds - timeLeft) / totalSeconds) * 100
+  // Duración total de la sesión actual según el modo: en descanso, la del descanso;
+  // en Enfoque, la de la tarea activa (o la duración de enfoque por defecto).
+  const totalSeconds = isBreak
+    ? settings[timerMode] * 60
+    : activeTask?.focusTime
+      ? activeTask.focusTime * 60
+      : settings.work * 60
+  const progress = timerStatus === 'idle' ? 0 : ((totalSeconds - shownTime) / totalSeconds) * 100
 
   const circumference = 2 * Math.PI * 120
   const strokeDashoffset = circumference - (progress / 100) * circumference
@@ -59,13 +68,19 @@ export function TimerCard() {
     // En Enfoque la edición sigue la duración de la tarea activa; sin ella queda bloqueada.
     if (focusLocked) return
     setIsEditing(true)
-    setEditMinutes(String(Math.floor(timeLeft / 60)))
+    setEditMinutes(String(Math.floor(shownTime / 60)))
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
   const handleTimeSave = () => {
     const val = parseInt(editMinutes, 10)
     if (val > 0 && val <= 120) {
+      // En descanso, editar solo cambia la cuenta del descanso.
+      if (isBreak) {
+        setBreakTimeLeft(val * 60)
+        setIsEditing(false)
+        return
+      }
       // En Enfoque la duración pertenece a la tarea activa; se persiste en ella.
       if (timerMode === 'work' && activeTask) {
         setTaskFocusTime(activeTask.id, val)
@@ -83,8 +98,10 @@ export function TimerCard() {
   useEffect(() => {
     if (timerStatus !== 'running') return
 
-    if (timeLeft === 0) {
-       playCompletionSound() 
+    // La cuenta y la detección de fin dependen del modo: Enfoque usa timeLeft
+    // (y persiste en la tarea); los descansos usan su cuenta propia sin tocar tareas.
+    if (shownTime === 0) {
+       playCompletionSound()
 
       if (timerMode === 'work') {
         useAppStore.getState().incrementSessions()
@@ -96,12 +113,16 @@ export function TimerCard() {
     }
 
     const id = setInterval(() => {
-      useAppStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }))
-      useAppStore.getState().saveTaskTime()
+      if (timerMode === 'work') {
+        useAppStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }))
+        useAppStore.getState().saveTaskTime()
+      } else {
+        useAppStore.setState((state) => ({ breakTimeLeft: state.breakTimeLeft - 1 }))
+      }
     }, 1000)
 
     return () => clearInterval(id)
-  }, [timerStatus, timeLeft, timerMode, setTimerMode])
+  }, [timerStatus, shownTime, timerMode, setTimerMode])
 
 
   return (

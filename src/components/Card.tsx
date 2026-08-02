@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconX, IconFlame, IconTarget, IconCircleDashed, IconCircleCheck, IconPlayerPlay, IconPlayerPause, IconClock, IconChevronDown, IconCheck } from '@tabler/icons-react'
+import { IconX, IconFlame, IconTarget, IconCircleDashed, IconCircleCheck, IconPlayerPlay, IconPlayerPause, IconClock, IconChevronDown, IconCheck, IconCoffee } from '@tabler/icons-react'
 import { useAppStore, type Task, type TaskStatus } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
 import { useThemeColors } from '../hooks/useThemeColors'
@@ -57,6 +57,7 @@ export function Card({ task }: CardProps) {
   const switchActiveTask = useAppStore((s) => s.switchActiveTask)
   const startTimer = useAppStore((s) => s.startTimer)
   const toggleFocus = useAppStore((s) => s.toggleFocus)
+  const takeShortBreak = useAppStore((s) => s.takeShortBreak)
   const moveTask = useAppStore((s) => s.moveTask)
   const removeTask = useAppStore((s) => s.removeTask)
   const setTaskFocusTime = useAppStore((s) => s.setTaskFocusTime)
@@ -227,6 +228,19 @@ export function Card({ task }: CardProps) {
               ) : (
                 <><IconTarget size={11} /> {t.focusAction}</>
               )}
+            </button>
+          )}
+
+          {/* Atajo: iniciar un Descanso Corto aislado (no afecta el tiempo de la tarea) */}
+          {task.status === 'doing' && (
+            <button
+              onClick={takeShortBreak}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0"
+              style={{ backgroundColor: subtleBg, color: colorMuted }}
+              title={t.takeBreak}
+            >
+              <IconCoffee size={11} /> {t.takeBreak}
             </button>
           )}
 
