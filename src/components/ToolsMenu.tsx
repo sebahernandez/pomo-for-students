@@ -36,11 +36,11 @@ export function ToolsMenu({ items, onClose }: ToolsMenuProps) {
               onClose()
               item.onOpen()
             }}
-            className="btn-secondary w-full justify-start gap-2"
+            className="menu-item"
             aria-label={item.label}
             title={item.label}
           >
-            {item.icon}
+            <span className="menu-item__icon">{item.icon}</span>
             <span>{item.label}</span>
           </button>
         ))}
