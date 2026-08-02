@@ -32,7 +32,7 @@ export function Header() {
   const languageButton = (
     <button onClick={toggleLang} className="btn-secondary" title={t.language} aria-label={t.language}>
       <IconLanguage size={18} />
-      <span className="ml-1 text-xs font-mono">{language.toUpperCase()}</span>
+      <span className="ml-1 text-xs font-mono">{language === 'en' ? 'ES' : 'EN'}</span>
     </button>
   )
 
