@@ -7,38 +7,38 @@ import { useAppStore } from '../context/AppContext'
 describe('TimerCard mode tabs', () => {
   beforeEach(() => {
     useAppStore.setState({
-      settings: { work: 25, shortBreak: 5, longBreak: 15 },
+      settings: { work: 25, break: 5 },
       timerMode: 'work',
       timerStatus: 'idle',
       timeLeft: 25 * 60,
+      breakTimeLeft: 5 * 60,
     })
   })
 
-  it('renders the three modes as tabs with the current mode selected', () => {
+  it('renders the two modes as tabs with the current mode selected', () => {
     render(<TimerCard />)
 
     const tablist = screen.getByRole('tablist')
     const tabs = within(tablist).getAllByRole('tab')
-    expect(tabs).toHaveLength(3)
+    expect(tabs).toHaveLength(2)
 
     const focusTab = within(tablist).getByRole('tab', { name: 'Enfoque' })
     expect(focusTab).toHaveAttribute('aria-selected', 'true')
-    expect(within(tablist).getByRole('tab', { name: 'Descanso Corto' })).toHaveAttribute('aria-selected', 'false')
-    expect(within(tablist).getByRole('tab', { name: 'Descanso Largo' })).toHaveAttribute('aria-selected', 'false')
+    expect(within(tablist).getByRole('tab', { name: 'Descanso' })).toHaveAttribute('aria-selected', 'false')
   })
 
-  it('switching tabs loads the mode duration and leaves the timer idle', async () => {
+  it('switching to the break tab loads its duration and leaves the timer idle', async () => {
     const user = userEvent.setup()
     render(<TimerCard />)
 
-    await user.click(screen.getByRole('tab', { name: 'Descanso Corto' }))
+    await user.click(screen.getByRole('tab', { name: 'Descanso' }))
 
     const state = useAppStore.getState()
-    expect(state.timerMode).toBe('shortBreak')
+    expect(state.timerMode).toBe('break')
     expect(state.timerStatus).toBe('idle')
-    expect(state.timeLeft).toBe(5 * 60)
+    expect(state.breakTimeLeft).toBe(5 * 60)
 
-    expect(screen.getByRole('tab', { name: 'Descanso Corto' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tab', { name: 'Descanso' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByText('05:00')).toBeInTheDocument()
   })
 })

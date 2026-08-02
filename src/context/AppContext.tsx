@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import type { Language } from '../i18n/translations'
 import type { ThemeName } from '../themes'
 
-type TimerMode = 'work' | 'shortBreak' | 'longBreak'
+type TimerMode = 'work' | 'break'
 type TimerStatus = 'idle' | 'running' | 'paused'
 export type TaskStatus = 'todo' | 'doing' | 'done'
 
@@ -26,8 +26,7 @@ export interface SessionRecord {
 
 export interface Settings {
   work: number
-  shortBreak: number
-  longBreak: number
+  break: number
 }
 
 interface AppState {
@@ -36,6 +35,7 @@ interface AppState {
   timeLeft: number
   breakTimeLeft: number
   sessionsCompleted: number
+  finishPromptOpen: boolean
   activeTaskId: string | null
   settings: Settings
   sessionHistory: SessionRecord[]
@@ -53,7 +53,8 @@ interface AppState {
   pauseTimer: () => void
   resetTimer: () => void
   toggleFocus: () => void
-  takeShortBreak: () => void
+  takeBreak: () => void
+  closeFinishPrompt: () => void
   incrementSessions: () => void
   setActiveTask: (id: string | null) => void
   switchActiveTask: (id: string) => void
@@ -73,14 +74,25 @@ interface AppState {
 
 const DEFAULT_SETTINGS: Settings = {
   work: 25,
-  shortBreak: 5,
-  longBreak: 15,
+  break: 5,
+}
+
+// Normaliza a la forma nueva { work, break }, migrando configuraciones antiguas
+// que guardaban shortBreak/longBreak (se conserva shortBreak como break).
+const migrateSettings = (raw: unknown): Settings => {
+  const s = (raw ?? {}) as Record<string, unknown>
+  const num = (v: unknown, fallback: number) =>
+    typeof v === 'number' && Number.isFinite(v) ? v : fallback
+  return {
+    work: num(s.work, DEFAULT_SETTINGS.work),
+    break: num(s.break ?? s.shortBreak, DEFAULT_SETTINGS.break),
+  }
 }
 
 const loadSettings = (): Settings => {
   try {
     const stored = localStorage.getItem('pomo-settings')
-    return stored ? JSON.parse(stored) : DEFAULT_SETTINGS
+    return stored ? migrateSettings(JSON.parse(stored)) : DEFAULT_SETTINGS
   } catch {
     return DEFAULT_SETTINGS
   }
@@ -92,16 +104,13 @@ const saveSettings = (settings: Settings) => {
 
 const getDurations = (settings: Settings): Record<TimerMode, number> => ({
   work: settings.work * 60,
-  shortBreak: settings.shortBreak * 60,
-  longBreak: settings.longBreak * 60,
+  break: settings.break * 60,
 })
 
-// Variación de fondo por modo de descanso; se aplica al <html>.
+// Variación de fondo del modo Descanso; se aplica al <html>.
 const applyModeClasses = (mode: TimerMode) => {
   if (typeof window === 'undefined') return
-  document.documentElement.classList.remove('mode-shortBreak', 'mode-longBreak')
-  if (mode === 'shortBreak') document.documentElement.classList.add('mode-shortBreak')
-  if (mode === 'longBreak') document.documentElement.classList.add('mode-longBreak')
+  document.documentElement.classList.toggle('mode-break', mode === 'break')
 }
 
 const loadTasks = (): Task[] => {
@@ -137,8 +146,9 @@ export const useAppStore = create<AppState>((set) => {
   timerMode: 'work',
   timerStatus: 'idle',
   timeLeft: durations.work,
-  breakTimeLeft: durations.shortBreak,
+  breakTimeLeft: durations.break,
   sessionsCompleted: 0,
+  finishPromptOpen: false,
   activeTaskId: null,
   settings,
 
@@ -184,14 +194,16 @@ export const useAppStore = create<AppState>((set) => {
       return { timerStatus: 'running' }
     }),
 
-  // Atajo desde la tarjeta: inicia un Descanso Corto aislado, sin tocar el tiempo
-  // de Enfoque ni el de ninguna tarea.
-  takeShortBreak: () =>
+  // Atajo desde la tarjeta / aviso de fin de tarea: inicia el Descanso general
+  // aislado, sin tocar el tiempo de Enfoque ni el de ninguna tarea.
+  takeBreak: () =>
     set((state) => {
       const d = getDurations(state.settings)
-      applyModeClasses('shortBreak')
-      return { timerMode: 'shortBreak', breakTimeLeft: d.shortBreak, timerStatus: 'running' }
+      applyModeClasses('break')
+      return { timerMode: 'break', breakTimeLeft: d.break, timerStatus: 'running' }
     }),
+
+  closeFinishPrompt: () => set({ finishPromptOpen: false }),
 
   resetTimer: () =>
     set((state) => {
@@ -285,11 +297,11 @@ export const useAppStore = create<AppState>((set) => {
     set((state) => {
       saveSettings(newSettings)
       const d = getDurations(newSettings)
-      return {
-        settings: newSettings,
-        timeLeft: d[state.timerMode],
-        timerStatus: 'idle',
+      // Recargar la cuenta del modo actual (Enfoque usa timeLeft; Descanso, breakTimeLeft).
+      if (state.timerMode === 'work') {
+        return { settings: newSettings, timeLeft: d.work, timerStatus: 'idle' }
       }
+      return { settings: newSettings, breakTimeLeft: d.break, timerStatus: 'idle' }
     }),
 
   addTask: (title) =>
@@ -321,7 +333,9 @@ export const useAppStore = create<AppState>((set) => {
         t.id === id ? { ...t, status, timeLeft: (status === 'done' || status === 'todo') ? null : t.timeLeft } : t
       )
       saveTasks(tasks)
-      return { tasks }
+      // Al terminar (mover a Hecho) la tarea activa, ofrecer el aviso de fin de tarea.
+      const finishPromptOpen = id === state.activeTaskId && status === 'done' ? true : state.finishPromptOpen
+      return { tasks, finishPromptOpen }
     }),
 
   incrementTaskPomodoro: (id) =>

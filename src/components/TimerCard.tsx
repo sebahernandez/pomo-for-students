@@ -42,8 +42,7 @@ export function TimerCard() {
 
   const modes = [
     { key: 'work' as const, label: t.focus },
-    { key: 'shortBreak' as const, label: t.shortBreak },
-    { key: 'longBreak' as const, label: t.longBreak },
+    { key: 'break' as const, label: t.break },
   ]
 
   const activeTask = tasks.find((t) => t.id === activeTaskId)
@@ -105,7 +104,7 @@ export function TimerCard() {
 
       if (timerMode === 'work') {
         useAppStore.getState().incrementSessions()
-        setTimerMode('shortBreak')
+        setTimerMode('break')
       } else {
         setTimerMode('work')
       }

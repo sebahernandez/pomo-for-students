@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { IconSettings, IconClock, IconCoffee, IconBeach } from '@tabler/icons-react'
+import { IconSettings, IconClock, IconCoffee } from '@tabler/icons-react'
 import { useAppStore, type Settings } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
 import { ThemeSelector } from './ThemeSelector'
@@ -25,8 +25,7 @@ interface FieldConfig {
 // number validation and this code fully owns parsing and range enforcement.
 const FIELDS: FieldConfig[] = [
   { key: 'work', min: 1, max: 60, icon: <IconClock size={12} />, label: (t) => t.focusMin },
-  { key: 'shortBreak', min: 1, max: 30, icon: <IconCoffee size={12} />, label: (t) => t.shortBreakMin },
-  { key: 'longBreak', min: 1, max: 60, icon: <IconBeach size={12} />, label: (t) => t.longBreakMin },
+  { key: 'break', min: 1, max: 60, icon: <IconCoffee size={12} />, label: (t) => t.breakMin },
 ]
 
 type FormState = Record<SettingKey, string>

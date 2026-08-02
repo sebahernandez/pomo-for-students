@@ -1,5 +1,6 @@
 import { TimerCard } from './components/TimerCard'
 import { KanbanBoard } from './components/KanbanBoard'
+import { FinishTaskPrompt } from './components/FinishTaskPrompt'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <TimerCard />
         </div>
       </div>
+      <FinishTaskPrompt />
     </div>
   )
 }

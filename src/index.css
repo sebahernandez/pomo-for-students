@@ -48,12 +48,8 @@ body::before {
   pointer-events: none;
 }
 
-html.mode-shortBreak {
+html.mode-break {
   --bg-gradient: linear-gradient(-45deg, #f9fdfa, #e6f5ec, #bbf7d0, #f0f9f4);
-}
-
-html.mode-longBreak {
-  --bg-gradient: linear-gradient(-45deg, #f8fbff, #e4edf8, #bae6fd, #eef4fc);
 }
 
 /* Theme: Ocean - Light */
@@ -121,12 +117,8 @@ html.dark {
   color: #fafafa;
 }
 
-html.dark.mode-shortBreak {
+html.dark.mode-break {
   --bg-gradient: linear-gradient(-45deg, #070b09, #0a130e, #060a08, #080c0a);
-}
-
-html.dark.mode-longBreak {
-  --bg-gradient: linear-gradient(-45deg, #07090c, #0b1020, #06080b, #070a10);
 }
 
 /* Theme CSS Variables */

@@ -12,7 +12,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
   const t = useTranslations(language)
 
   const steps = language === 'es' ? [
-    { icon: <IconClock size={20} />, title: 'Elige tu modo', desc: 'Selecciona Enfoque, Descanso Corto o Descanso Largo. El fondo cambia de color según el modo.' },
+    { icon: <IconClock size={20} />, title: 'Elige tu modo', desc: 'Selecciona Enfoque o Descanso. El fondo cambia de color según el modo.' },
     { icon: <IconGripVertical size={20} />, title: 'Agrega y organiza tareas', desc: 'Escribe una tarea y presiona Agregar. Arrastra las tarjetas entre columnas para cambiar su estado.' },
     { icon: <IconCircleHalf size={20} />, title: 'Mueve a "En Progreso"', desc: 'Arrastra una tarea a "En Progreso" o usa el botón en la tarjeta.' },
     { icon: <IconTarget size={20} />, title: 'Configura tu tiempo', desc: 'En cada tarea "En Progreso", define los minutos de enfoque personalizados con el botón de reloj.' },
@@ -23,7 +23,7 @@ export function GuideModal({ onClose }: GuideModalProps) {
     { icon: <IconChartBar size={20} />, title: 'Revisa tu historial', desc: 'Haz clic en el ícono de gráfico para ver todas tus sesiones completadas con estadísticas.' },
     { icon: <IconSettings size={20} />, title: 'Personaliza la app', desc: 'Ajusta duraciones, cambia idioma (EN/ES) y alterna entre modo claro y oscuro.' },
   ] : [
-    { icon: <IconClock size={20} />, title: 'Choose your mode', desc: 'Select Focus, Short Break, or Long Break. The background color changes based on the mode.' },
+    { icon: <IconClock size={20} />, title: 'Choose your mode', desc: 'Select Focus or Break. The background color changes based on the mode.' },
     { icon: <IconGripVertical size={20} />, title: 'Add and organize tasks', desc: 'Type a task and click Add. Drag cards between columns to change their status.' },
     { icon: <IconCircleHalf size={20} />, title: 'Move to "In Progress"', desc: 'Drag a task to "In Progress" or use the button on the card.' },
     { icon: <IconTarget size={20} />, title: 'Set your time', desc: 'On each "In Progress" task, define custom focus minutes with the clock button.' },

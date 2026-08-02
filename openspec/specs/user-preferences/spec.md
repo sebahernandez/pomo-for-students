@@ -5,7 +5,9 @@ Las preferencias del usuario permiten adaptar la aplicación a su gusto y contex
 ## Requirements
 ### Requirement: Configuración de duraciones
 
-El sistema SHALL permitir ajustar las duraciones en minutos de Enfoque, Descanso Corto y Descanso Largo. Durante la edición, cada campo numérico SHALL comportarse como un campo de texto que acepta un valor vacío o parcial sin corromper la configuración guardada. Al guardar, el sistema SHALL transformar y validar cada valor ingresado: parsearlo a un entero y recortarlo (clamp) al rango permitido del campo; si el valor es vacío o inválido, SHALL conservar el valor previamente guardado en lugar de persistir `0` o un valor no numérico. Solo se persisten duraciones válidas dentro de rango.
+El sistema SHALL permitir ajustar las duraciones en minutos de Enfoque y Descanso. Durante la edición, cada campo numérico SHALL comportarse como un campo de texto que acepta un valor vacío o parcial sin corromper la configuración guardada. Al guardar, el sistema SHALL transformar y validar cada valor ingresado: parsearlo a un entero y recortarlo (clamp) al rango permitido del campo; si el valor es vacío o inválido, SHALL conservar el valor previamente guardado en lugar de persistir `0` o un valor no numérico. Solo se persisten duraciones válidas dentro de rango.
+
+La configuración previamente guardada con las duraciones de Descanso Corto y Descanso Largo SHALL migrarse a la nueva forma con una única duración de Descanso, sin perder la duración de Enfoque ni requerir acción del usuario.
 
 Al guardar nuevas duraciones, el temporizador SHALL recargar el tiempo del modo actual y quedar inactivo. Tras aplicar y normalizar los valores, el panel de Configuración SHALL cerrarse, dando una confirmación clara de que la acción se completó.
 
@@ -15,6 +17,12 @@ Al guardar nuevas duraciones, el temporizador SHALL recargar el tiempo del modo 
 - **THEN** las duraciones se aplican a los modos correspondientes
 - **AND** el temporizador se recarga con la duración del modo actual en estado inactivo
 - **AND** el panel de configuración se cierra
+
+#### Scenario: Migración de configuración previa
+
+- **WHEN** existe una configuración guardada con las duraciones antiguas de Descanso Corto y Descanso Largo
+- **THEN** el sistema la migra a una única duración de Descanso
+- **AND** conserva la duración de Enfoque existente
 
 #### Scenario: Editar un campo dejándolo vacío o parcial
 

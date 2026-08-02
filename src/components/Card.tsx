@@ -57,7 +57,7 @@ export function Card({ task }: CardProps) {
   const switchActiveTask = useAppStore((s) => s.switchActiveTask)
   const startTimer = useAppStore((s) => s.startTimer)
   const toggleFocus = useAppStore((s) => s.toggleFocus)
-  const takeShortBreak = useAppStore((s) => s.takeShortBreak)
+  const takeBreak = useAppStore((s) => s.takeBreak)
   const moveTask = useAppStore((s) => s.moveTask)
   const removeTask = useAppStore((s) => s.removeTask)
   const setTaskFocusTime = useAppStore((s) => s.setTaskFocusTime)
@@ -234,7 +234,7 @@ export function Card({ task }: CardProps) {
           {/* Atajo: iniciar un Descanso Corto aislado (no afecta el tiempo de la tarea) */}
           {task.status === 'doing' && (
             <button
-              onClick={takeShortBreak}
+              onClick={takeBreak}
               onPointerDown={(e) => e.stopPropagation()}
               className="text-xs px-2 py-1 rounded-md transition-colors inline-flex items-center gap-1 shrink-0"
               style={{ backgroundColor: subtleBg, color: colorMuted }}

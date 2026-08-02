@@ -1,8 +1,5 @@
-# pomodoro-timer Specification
+## MODIFIED Requirements
 
-## Purpose
-El temporizador Pomodoro es el núcleo de la aplicación: permite al usuario ejecutar sesiones cronometradas de enfoque y descanso, controlar su avance y recibir señales claras al inicio y fin de cada sesión.
-## Requirements
 ### Requirement: Modos de temporizador
 
 El sistema SHALL ofrecer dos modos de temporizador — Enfoque (`work`) y Descanso (`break`) — cada uno con su propia duración configurable. Ambos modos SHALL presentarse como una barra de pestañas integrada a la tarjeta del temporizador, mostrando la pestaña del modo activo destacada y la inactiva atenuada pero accionable. Al seleccionar un modo, el temporizador SHALL cargar la duración de ese modo, quedar en estado inactivo (`idle`) y ejecutar una animación de transición sobre el contenido del temporizador que señale el cambio de estado.
@@ -93,40 +90,6 @@ Al reiniciar en modo Enfoque con una tarea activa, el temporizador SHALL volver 
 - **AND** el temporizador queda en estado inactivo
 - **AND** no se modifica el tiempo de ninguna tarea
 
-### Requirement: Cuenta regresiva
-
-Mientras el temporizador está en marcha, el sistema SHALL disminuir el tiempo restante en un segundo cada segundo y SHALL mostrarlo en formato `MM:SS`.
-
-#### Scenario: Descuento por segundo
-
-- **WHEN** el temporizador está en marcha
-- **THEN** el tiempo restante disminuye en 1 segundo cada segundo transcurrido
-- **AND** la visualización se actualiza en formato `MM:SS` con relleno de ceros
-
-### Requirement: Edición de duración en vivo
-
-El sistema SHALL permitir editar la duración del temporizador haciendo clic sobre el tiempo mostrado, únicamente cuando el temporizador está inactivo. El valor aceptado SHALL estar entre 1 y 120 minutos. En el modo Enfoque, esta edición SHALL estar disponible solo cuando existe una tarea activa y SHALL ajustar la duración de esa tarea; sin tarea activa la edición del tiempo de enfoque SHALL quedar deshabilitada.
-
-#### Scenario: Editar minutos con valor válido
-
-- **WHEN** el usuario, con el temporizador inactivo y (en modo Enfoque) con una tarea activa, hace clic en el tiempo e ingresa un valor entre 1 y 120 y confirma
-- **THEN** el tiempo restante se ajusta a ese número de minutos
-
-#### Scenario: Rechazar valor fuera de rango
-
-- **WHEN** el usuario ingresa un valor menor a 1 o mayor a 120
-- **THEN** el sistema no modifica el tiempo restante
-
-#### Scenario: Edición bloqueada mientras corre
-
-- **WHEN** el temporizador está en marcha o pausado
-- **THEN** el sistema no permite editar la duración haciendo clic en el tiempo
-
-#### Scenario: Edición de enfoque bloqueada sin tarea activa
-
-- **WHEN** el modo es Enfoque y no existe una tarea activa
-- **THEN** el sistema no permite editar la duración del temporizador haciendo clic en el tiempo
-
 ### Requirement: Transición automática al completar
 
 Cuando el tiempo restante llega a cero con el temporizador en marcha, el sistema SHALL reproducir un sonido de finalización y cambiar automáticamente de modo. Al completar una sesión de Enfoque SHALL registrar una sesión completada y pasar a Descanso; al completar un descanso SHALL volver a Enfoque.
@@ -143,29 +106,6 @@ Cuando el tiempo restante llega a cero con el temporizador en marcha, el sistema
 - **WHEN** una sesión de Descanso llega a 0 segundos en marcha
 - **THEN** se reproduce el sonido de finalización
 - **AND** el temporizador vuelve al modo Enfoque
-
-### Requirement: Indicador visual de progreso
-
-El sistema SHALL mostrar un anillo de progreso circular que refleje la fracción de tiempo transcurrida de la sesión actual. En estado inactivo el progreso SHALL ser 0%.
-
-#### Scenario: Progreso durante la sesión
-
-- **WHEN** el temporizador avanza en marcha
-- **THEN** el anillo de progreso crece proporcionalmente al tiempo transcurrido respecto a la duración total de la sesión
-
-#### Scenario: Sin progreso en inactivo
-
-- **WHEN** el temporizador está inactivo
-- **THEN** el anillo de progreso muestra 0%
-
-### Requirement: Contador de sesiones completadas
-
-El sistema SHALL mostrar la cantidad de sesiones de enfoque completadas en la sesión de uso actual.
-
-#### Scenario: Visualización del conteo
-
-- **WHEN** el usuario ha completado una o más sesiones de enfoque
-- **THEN** la interfaz muestra el total de sesiones completadas con su etiqueta traducida
 
 ### Requirement: Descansos independientes del enfoque
 
@@ -193,4 +133,3 @@ El modo Descanso (`break`) SHALL correr sobre una cuenta regresiva propia, indep
 - **WHEN** el modo es Descanso, está inactivo, y el usuario edita el tiempo mostrado
 - **THEN** solo cambia la cuenta del descanso
 - **AND** ni el tiempo de Enfoque ni el de ninguna tarea se modifican
-

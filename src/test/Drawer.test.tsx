@@ -87,7 +87,7 @@ describe('Panels presented as drawers', () => {
 
   it('SettingsPanel keeps the previous value when a field is saved empty', async () => {
     const user = userEvent.setup()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={vi.fn()} />)
 
     const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
@@ -101,7 +101,7 @@ describe('Panels presented as drawers', () => {
 
   it('SettingsPanel clamps an out-of-range value to the field limit on save', async () => {
     const user = userEvent.setup()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={vi.fn()} />)
 
     const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
@@ -117,7 +117,7 @@ describe('Panels presented as drawers', () => {
   it('SettingsPanel persists valid values and closes the drawer on save', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={onClose} />)
 
     const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
@@ -136,7 +136,7 @@ describe('Panels presented as drawers', () => {
   it('SettingsPanel blocks passive close and warns when there are unsaved changes', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={onClose} />)
 
     const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
@@ -161,7 +161,7 @@ describe('Panels presented as drawers', () => {
   it('SettingsPanel closes via scrim when there are no unsaved changes', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={onClose} />)
 
     const scrim = screen.getByRole('dialog').parentElement as HTMLElement
@@ -172,7 +172,7 @@ describe('Panels presented as drawers', () => {
   it('SettingsPanel cancels and discards when there are unsaved changes', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
-    useAppStore.setState({ settings: { work: 25, shortBreak: 5, longBreak: 15 } })
+    useAppStore.setState({ settings: { work: 25, break: 5 } })
     render(<SettingsPanel onClose={onClose} />)
 
     const workInput = screen.getByLabelText('Enfoque (min)') as HTMLInputElement
