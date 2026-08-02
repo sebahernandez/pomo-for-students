@@ -351,6 +351,17 @@ html.dark {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Realce de la tarjeta activa del Kanban: pulso sutil del anillo/halo cuando la
+   sesión está en marcha. El color se inyecta por variables inline derivadas del
+   tema (--active-ring / --active-glow-weak / --active-glow-strong), de modo que
+   el efecto cambia con cada tema. Sin marcha, el realce estático vive en el
+   box-shadow inline de la tarjeta. */
+@keyframes active-card-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--active-ring), 0 4px 14px var(--active-glow-weak); }
+  50% { box-shadow: 0 0 0 1px var(--active-ring), 0 5px 18px var(--active-glow-strong); }
+}
+.active-card-pulse { animation: active-card-pulse 2.8s ease-in-out infinite; }
+
 .animate-float { animation: float 3s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-fade-in { animation: fade-in 0.4s ease-out; }
@@ -362,6 +373,8 @@ html.dark {
 @media (prefers-reduced-motion: reduce) {
   .animate-slide-in-right { animation: fade-in 0.2s ease-out; }
   .animate-mode-switch { animation: none; }
+  /* Sin movimiento: la tarjeta activa conserva su realce estático (box-shadow inline). */
+  .active-card-pulse { animation: none; }
 }
 
 .btn-primary {

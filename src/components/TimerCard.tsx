@@ -13,11 +13,12 @@ export function TimerCard() {
     sessionsCompleted,
     activeTaskId,
     tasks,
-    startTimer,
     pauseTimer,
     resetTimer,
+    toggleFocus,
     setTimerMode,
     setTimeLeft,
+    setTaskFocusTime,
     language,
     darkMode,
   } = useAppStore()
@@ -41,6 +42,9 @@ export function TimerCard() {
   ]
 
   const activeTask = tasks.find((t) => t.id === activeTaskId)
+  // El modo Enfoque queda subordinado a la tarjeta Kanban activa: sin ella no puede correr.
+  // Los descansos siguen siendo libres.
+  const focusLocked = timerMode === 'work' && !activeTask
   const settings = useAppStore.getState().settings
   const totalSeconds = activeTask?.focusTime
     ? activeTask.focusTime * 60
@@ -52,6 +56,8 @@ export function TimerCard() {
 
   const handleTimeClick = () => {
     if (timerStatus !== 'idle') return
+    // En Enfoque la edición sigue la duración de la tarea activa; sin ella queda bloqueada.
+    if (focusLocked) return
     setIsEditing(true)
     setEditMinutes(String(Math.floor(timeLeft / 60)))
     setTimeout(() => inputRef.current?.focus(), 50)
@@ -60,6 +66,10 @@ export function TimerCard() {
   const handleTimeSave = () => {
     const val = parseInt(editMinutes, 10)
     if (val > 0 && val <= 120) {
+      // En Enfoque la duración pertenece a la tarea activa; se persiste en ella.
+      if (timerMode === 'work' && activeTask) {
+        setTaskFocusTime(activeTask.id, val)
+      }
       setTimeLeft(val * 60)
     }
     setIsEditing(false)
@@ -101,8 +111,8 @@ export function TimerCard() {
         background: themeColors.glassBg,
       }}
     >
-      <div className="p-8">
-        <div className="flex justify-center gap-2 mb-6" role="tablist">
+      <div className="p-6">
+        <div className="flex justify-center gap-2 mb-4" role="tablist">
           {modes.map((mode) => {
             const isActive = timerMode === mode.key
             return (
@@ -111,7 +121,7 @@ export function TimerCard() {
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setTimerMode(mode.key)}
-                className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300"
+                className="px-3 py-1.5 rounded-xl text-sm font-medium transition-all duration-300"
                 style={
                   isActive
                     ? { backgroundColor: themeColors.primary, color: themeColors.gradientEnd }
@@ -135,7 +145,7 @@ export function TimerCard() {
           )}
         </div>
 
-        <div key={timerMode} className="relative w-80 h-80 sm:w-96 sm:h-96 mx-auto mb-8 p-6 animate-mode-switch">
+        <div key={timerMode} className="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto mb-6 p-4 animate-mode-switch">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 260 260" style={{overflow: 'visible'}}>
             <circle
               cx="130" cy="130" r="120"
@@ -186,14 +196,14 @@ export function TimerCard() {
                   onChange={(e) => setEditMinutes(e.target.value)}
                   onKeyDown={handleTimeKeyDown}
                   onBlur={handleTimeSave}
-                  className={`w-20 text-4xl font-bold tracking-tight text-center bg-transparent border-b-2 focus:outline-none ${darkMode ? 'border-white/30 focus:border-white text-white placeholder-white/30' : 'border-black/30 focus:border-black text-black placeholder-black/30'}`}
+                  className={`w-16 text-3xl font-bold tracking-tight text-center bg-transparent border-b-2 focus:outline-none ${darkMode ? 'border-white/30 focus:border-white text-white placeholder-white/30' : 'border-black/30 focus:border-black text-black placeholder-black/30'}`}
                   placeholder="00"
                 />
                 <span className={`text-xl ${darkMode ? 'text-white/50' : 'text-black/50'}`}>min</span>
               </div>
             ) : (
               <span
-                className={`text-6xl font-bold tracking-tight ${timerStatus === 'idle' ? 'cursor-pointer transition-colors hover:opacity-80' : ''}`}
+                className={`text-5xl font-bold tracking-tight ${timerStatus === 'idle' && !focusLocked ? 'cursor-pointer transition-colors hover:opacity-80' : ''}`}
                 style={{ color: textColor }}
                 onClick={handleTimeClick}
               >
@@ -203,32 +213,39 @@ export function TimerCard() {
           </div>
         </div>
 
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <span className={`inline-flex items-center gap-1.5 text-sm ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
             <IconClock size={14} />
             {t.sessionsCompleted(sessionsCompleted)}
           </span>
         </div>
 
-        <div className="flex items-center justify-center gap-3">
-          {timerStatus === 'idle' && (
-            <button onClick={startTimer} className="btn-success inline-flex items-center gap-1.5">
-              <IconPlayerPlay size={16} /> {t.start}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center justify-center gap-3">
+            {timerStatus === 'running' ? (
+              <button onClick={pauseTimer} className="btn-warning inline-flex items-center gap-1.5">
+                <IconPlayerPause size={16} /> {t.pause}
+              </button>
+            ) : (
+              <button
+                onClick={toggleFocus}
+                disabled={focusLocked}
+                aria-disabled={focusLocked}
+                className="btn-success inline-flex items-center gap-1.5"
+                style={focusLocked ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+              >
+                <IconPlayerPlay size={16} /> {timerStatus === 'paused' ? t.resume : t.start}
+              </button>
+            )}
+            <button onClick={resetTimer} className="btn-danger inline-flex items-center gap-1.5">
+              <IconRotate size={16} /> {t.reset}
             </button>
+          </div>
+          {focusLocked && (
+            <span className={`inline-flex items-center gap-1.5 text-xs ${darkMode ? 'text-white/50' : 'text-black/50'}`}>
+              <IconTarget size={12} /> {t.selectTaskToStart}
+            </span>
           )}
-          {timerStatus === 'running' && (
-            <button onClick={pauseTimer} className="btn-warning inline-flex items-center gap-1.5">
-              <IconPlayerPause size={16} /> {t.pause}
-            </button>
-          )}
-          {timerStatus === 'paused' && (
-            <button onClick={startTimer} className="btn-success inline-flex items-center gap-1.5">
-              <IconPlayerPlay size={16} /> {t.resume}
-            </button>
-          )}
-          <button onClick={resetTimer} className="btn-danger inline-flex items-center gap-1.5">
-            <IconRotate size={16} /> {t.reset}
-          </button>
         </div>
       </div>
     </div>

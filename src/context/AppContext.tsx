@@ -50,6 +50,7 @@ interface AppState {
   startTimer: () => void
   pauseTimer: () => void
   resetTimer: () => void
+  toggleFocus: () => void
   incrementSessions: () => void
   setActiveTask: (id: string | null) => void
   switchActiveTask: (id: string) => void
@@ -150,12 +151,39 @@ export const useAppStore = create<AppState>((set) => {
 
   setTimeLeft: (time) => set({ timeLeft: time }),
 
-  startTimer: () => set({ timerStatus: 'running' }),
+  // El modo Enfoque solo puede correr con una tarea activa; los descansos son libres.
+  startTimer: () =>
+    set((state) => {
+      if (state.timerMode === 'work' && state.activeTaskId === null) return {}
+      return { timerStatus: 'running' }
+    }),
 
   pauseTimer: () => set({ timerStatus: 'paused' }),
 
+  // Intención compartida por el temporizador y la tarjeta activa: enfocar/reanudar o pausar
+  // la misma sesión. Respeta la guarda de startTimer (no-op en Enfoque sin tarea activa).
+  toggleFocus: () =>
+    set((state) => {
+      if (state.timerStatus === 'running') return { timerStatus: 'paused' }
+      if (state.timerMode === 'work' && state.activeTaskId === null) return {}
+      return { timerStatus: 'running' }
+    }),
+
   resetTimer: () =>
     set((state) => {
+      // En Enfoque con tarea activa, reiniciar vuelve a la duración de esa tarea y
+      // reinicia también su tiempo persistido, para que la tarjeta quede sincronizada.
+      if (state.timerMode === 'work' && state.activeTaskId) {
+        const activeTask = state.tasks.find((t) => t.id === state.activeTaskId)
+        const mins = activeTask?.focusTime ?? state.settings.work
+        const newTimeLeft = mins * 60
+        const tasks = state.tasks.map((t) =>
+          t.id === state.activeTaskId ? { ...t, timeLeft: newTimeLeft } : t
+        )
+        saveTasks(tasks)
+        return { timeLeft: newTimeLeft, timerStatus: 'idle', tasks }
+      }
+      // Descansos o Enfoque sin tarea activa: comportamiento previo, sin tocar tareas.
       const d = getDurations(state.settings)
       return { timeLeft: d[state.timerMode], timerStatus: 'idle' }
     }),

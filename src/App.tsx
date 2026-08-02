@@ -10,7 +10,7 @@ function App() {
             <KanbanBoard />
           </div>
         </div>
-        <div className="order-1 lg:order-2 lg:w-[420px] lg:flex-[0_0_420px]">
+        <div className="order-1 lg:order-2 lg:w-[340px] lg:flex-[0_0_340px]">
           <TimerCard />
         </div>
       </div>
