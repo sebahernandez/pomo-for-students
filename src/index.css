@@ -434,6 +434,69 @@ html.dark .btn-secondary:hover {
 }
 
 /*
+ * Header controls float directly over the animated Grainient background (no card
+ * behind them), so they get a frosted, higher-contrast treatment than the default
+ * btn-secondary — a semi-opaque pill with blur + a theme-colored icon that stays
+ * legible over any part of the gradient. Scoped to <header> so modal/card buttons
+ * keep the subtle default look.
+ */
+header .btn-secondary {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--theme-primary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+header .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+html.dark header .btn-secondary {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--theme-text-secondary);
+}
+
+html.dark header .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/*
+ * Footer social links — circular icon buttons tinted with the active theme's
+ * secondary color, sitting on the footer's glass bar. Subtle lift + fill on hover.
+ */
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-social:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+html.dark .footer-social {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .footer-social:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/*
  * Menu row used by the tools drawer on tablet/mobile. Unlike btn-secondary
  * (a centered icon chip), this is a full-width list row: icon in a fixed
  * leading slot, label left-aligned, comfortable padding and a consistent
