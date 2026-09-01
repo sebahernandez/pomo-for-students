@@ -6,7 +6,7 @@ import { Footer } from './components/Footer.tsx'
 import { Header } from './components/Header.tsx'
 import { OnboardingWizard } from './components/OnboardingWizard.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
-import { ThemedBackdrop } from './components/ThemedBackdrop.tsx'
+import { GrainientBackground } from './components/GrainientBackground.tsx'
 import { DarkModeInit } from './components/DarkModeInit.tsx'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DarkModeInit />
     <Analytics />
-    <ThemedBackdrop />
+    <GrainientBackground />
     <OnboardingWizard />
     <CookieConsentBanner />
     <div className="min-h-screen flex flex-col">

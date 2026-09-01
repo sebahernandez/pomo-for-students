@@ -48,6 +48,18 @@ body::before {
   pointer-events: none;
 }
 
+/*
+ * Grainient (WebGL) background container. Painted opaque on top of body::before,
+ * so the CSS `--bg-gradient` above stays as a graceful fallback (no WebGL / pre-mount /
+ * prefers-reduced-motion). See GrainientBackground.tsx.
+ */
+.grainient-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 html.mode-break {
   --bg-gradient: linear-gradient(-45deg, #f9fdfa, #e6f5ec, #bbf7d0, #f0f9f4);
 }
