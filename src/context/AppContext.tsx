@@ -620,12 +620,22 @@ export const useAppStore = create<AppState>((set, get) => {
 
   moveTask: (id, status) =>
     set((state) => {
+      const wasDone = state.tasks.find((t) => t.id === id)?.status === 'done'
       const tasks = state.tasks.map((t) =>
         t.id === id ? { ...t, status, timeLeft: (status === 'done' || status === 'todo') ? null : t.timeLeft } : t
       )
       saveTasks(tasks)
       // Al terminar (mover a Hecho) la tarea activa, ofrecer el aviso de fin de tarea.
       const finishPromptOpen = id === state.activeTaskId && status === 'done' ? true : state.finishPromptOpen
+      // Completar una tarea (transición a Hecho) también cuenta para la meta
+      // diaria de la racha, igual que terminar un pomodoro de Enfoque. Solo la
+      // transición entrante cuenta, para que re-arrastrar una tarea ya hecha no
+      // infle el conteo.
+      if (status === 'done' && !wasDone) {
+        const streak = recordActivity(state.streak, Date.now())
+        saveStreak(streak)
+        return { tasks, finishPromptOpen, streak }
+      }
       return { tasks, finishPromptOpen }
     }),
 

@@ -316,3 +316,55 @@ describe('storage resilience', () => {
     }
   })
 })
+
+describe('streak from completed tasks', () => {
+  const T0 = new Date('2026-09-01T12:00:00').getTime()
+  // Clave de fecha local YYYY-MM-DD del instante fijado, igual que todayKey().
+  const todayKeyLocal = () => {
+    const d = new Date(T0)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(T0)
+    // El estado base ya viene reseteado por el beforeEach global; partimos con
+    // una racha vacía explícita para aislar el efecto de moveTask.
+    useAppStore.setState({
+      streak: { currentStreak: 0, longestStreak: 0, lastActiveDate: null, dailyCounts: {} },
+    })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('moving a task to done counts toward the daily streak goal', () => {
+    const a = makeTask({ status: 'doing' })
+    const b = makeTask({ status: 'todo' })
+    useAppStore.setState({ tasks: [a, b] })
+
+    useAppStore.getState().moveTask(a.id, 'done')
+    useAppStore.getState().moveTask(b.id, 'done')
+
+    expect(useAppStore.getState().streak.dailyCounts[todayKeyLocal()]).toBe(2)
+  })
+
+  it('re-marking an already-done task does not count again', () => {
+    const a = makeTask({ status: 'done' })
+    useAppStore.setState({ tasks: [a] })
+
+    useAppStore.getState().moveTask(a.id, 'done')
+
+    expect(useAppStore.getState().streak.dailyCounts[todayKeyLocal()] ?? 0).toBe(0)
+  })
+
+  it('reaching 5 done tasks in a day marks the streak', () => {
+    const tasks = Array.from({ length: 5 }, () => makeTask({ status: 'todo' }))
+    useAppStore.setState({ tasks })
+
+    tasks.forEach((t) => useAppStore.getState().moveTask(t.id, 'done'))
+
+    expect(useAppStore.getState().streak.currentStreak).toBe(1)
+  })
+})
