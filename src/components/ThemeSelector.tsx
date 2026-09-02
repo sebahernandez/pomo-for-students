@@ -3,7 +3,10 @@ import { themes, darkThemes, type ThemeName } from '../themes'
 import { IconPalette, IconCheck } from '@tabler/icons-react'
 
 export function ThemeSelector() {
-  const { theme, setTheme, darkMode, language } = useAppStore()
+  const theme = useAppStore((s) => s.theme)
+  const setTheme = useAppStore((s) => s.setTheme)
+  const darkMode = useAppStore((s) => s.darkMode)
+  const language = useAppStore((s) => s.language)
 
   const currentThemes = darkMode ? darkThemes : themes
 

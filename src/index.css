@@ -275,6 +275,30 @@ html[data-theme="midnight"].dark {
   color: var(--theme-text-muted);
 }
 
+/* Themed accent — sigue el color de acento del tema activo. Usado por la
+ * tarjeta de racha (llama, días completados y día actual). */
+.text-theme-accent {
+  color: var(--theme-accent);
+}
+
+.bg-theme-accent {
+  background-color: var(--theme-accent);
+}
+
+.bg-theme-accent-soft {
+  background-color: color-mix(in srgb, var(--theme-accent) 15%, transparent);
+}
+
+.border-theme-accent {
+  border-color: var(--theme-accent);
+}
+
+/* Color legible SOBRE un fondo de acento (mismo emparejamiento que los botones
+ * primarios): contrasta con --theme-accent en claro y oscuro. */
+.text-theme-on-accent {
+  color: var(--theme-gradientEnd);
+}
+
 .glass {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);

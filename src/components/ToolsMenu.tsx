@@ -18,7 +18,7 @@ interface ToolsMenuProps {
 }
 
 export function ToolsMenu({ items, onClose }: ToolsMenuProps) {
-  const { language } = useAppStore()
+  const language = useAppStore((s) => s.language)
   const t = useTranslations(language)
 
   return (

@@ -45,7 +45,11 @@ const toFormState = (settings: Settings): FormState =>
   }, {} as FormState)
 
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
-  const { settings, updateSettings, language, theme, setTheme } = useAppStore()
+  const settings = useAppStore((s) => s.settings)
+  const updateSettings = useAppStore((s) => s.updateSettings)
+  const language = useAppStore((s) => s.language)
+  const theme = useAppStore((s) => s.theme)
+  const setTheme = useAppStore((s) => s.setTheme)
   const t = useTranslations(language)
   const [form, setForm] = useState<FormState>(() => toFormState(settings))
   const [showWarning, setShowWarning] = useState(false)

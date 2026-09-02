@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DndContext, type DragEndEvent, type DragOverEvent, useSensor, useSensors, PointerSensor, closestCorners } from '@dnd-kit/core'
 import { IconPlus, IconClipboardList, IconCircle, IconCircleHalf, IconCircleCheck } from '@tabler/icons-react'
 import { useAppStore, type TaskStatus } from '../context/AppContext'
@@ -7,7 +7,13 @@ import { useTranslations } from '../i18n/translations'
 import { useThemeColors } from '../hooks/useThemeColors'
 
 export function KanbanBoard() {
-  const { tasks, addTask, moveTask, setActiveTask, resetTimer, language, darkMode } = useAppStore()
+  const tasks = useAppStore((s) => s.tasks)
+  const addTask = useAppStore((s) => s.addTask)
+  const moveTask = useAppStore((s) => s.moveTask)
+  const setActiveTask = useAppStore((s) => s.setActiveTask)
+  const resetTimer = useAppStore((s) => s.resetTimer)
+  const language = useAppStore((s) => s.language)
+  const darkMode = useAppStore((s) => s.darkMode)
   const themeColors = useThemeColors()
   const [newTask, setNewTask] = useState('')
   const [overId, setOverId] = useState<TaskStatus | null>(null)
@@ -30,6 +36,12 @@ export function KanbanBoard() {
     { key: 'doing' as TaskStatus, label: t.inProgress, icon: <IconCircleHalf size={14} /> },
     { key: 'done' as TaskStatus, label: t.done, icon: <IconCircleCheck size={14} /> },
   ]
+
+  const tasksByStatus = useMemo(() => {
+    const grouped: Record<TaskStatus, typeof tasks> = { todo: [], doing: [], done: [] }
+    for (const task of tasks) grouped[task.status].push(task)
+    return grouped
+  }, [tasks])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -118,7 +130,7 @@ export function KanbanBoard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 content-start w-full">
             {columns.map((col, index) => {
-              const columnTasks = tasks.filter((t) => t.status === col.key)
+              const columnTasks = tasksByStatus[col.key]
               const isOver = overId === col.key
 
               const colors = [

@@ -2,13 +2,16 @@ import { IconClock, IconTrophy, IconFlame, IconTrash, IconHourglass } from '@tab
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
 import { Drawer } from './Drawer'
+import { StreakCard } from './StreakCard'
 
 interface SessionHistoryProps {
   onClose: () => void
 }
 
 export function SessionHistory({ onClose }: SessionHistoryProps) {
-  const { sessionHistory, clearHistory, language } = useAppStore()
+  const sessionHistory = useAppStore((s) => s.sessionHistory)
+  const clearHistory = useAppStore((s) => s.clearHistory)
+  const language = useAppStore((s) => s.language)
   const t = useTranslations(language)
 
   const totalPomodoros = sessionHistory.length
@@ -21,6 +24,8 @@ export function SessionHistory({ onClose }: SessionHistoryProps) {
       icon={<IconClock size={20} className="text-theme-muted" />}
       maxWidthClass="max-w-md"
     >
+      <StreakCard />
+
       <div className="flex gap-4 mb-4">
         <div className="bg-black/[0.03] dark:bg-white/[0.04] rounded-lg px-4 py-2.5 flex-1 text-center">
           <div className="text-lg font-bold text-theme-secondary inline-flex items-center gap-1.5 justify-center">

@@ -51,6 +51,9 @@ export const translations = {
     guide: 'User Guide',
     tools: 'Tools',
     menu: 'Menu',
+    streak: 'Streak',
+    days: 'Days',
+    today: 'Today',
     footer: 'Pomo Study — Focus better, one pomodoro at a time',
   },
   es: {
@@ -105,6 +108,9 @@ export const translations = {
     guide: 'Guía de Uso',
     tools: 'Herramientas',
     menu: 'Menú',
+    streak: 'Racha',
+    days: 'Días',
+    today: 'Hoy',
     footer: 'Pomo Study — Enfócate mejor, un pomodoro a la vez',
   },
 }

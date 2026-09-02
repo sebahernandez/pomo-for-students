@@ -20,14 +20,35 @@ const playTone = (
   osc.stop(startTime + duration)
 }
 
-export const playCompletionSound = () => {
-  const ctx = new AudioContext()
-  const now = ctx.currentTime
+// Un solo AudioContext compartido: los navegadores limitan los contextos
+// simultáneos (~6) y crear uno por campanada sin cerrarlo los agota, dejando
+// el sonido mudo. También puede no existir (jsdom, navegadores antiguos).
+let sharedCtx: AudioContext | null = null
 
-  playTone(ctx, 523.25, now, 0.4, 0.4)
-  playTone(ctx, 659.25, now + 0.15, 0.4, 0.4)
-  playTone(ctx, 783.99, now + 0.3, 0.4, 0.4)
-  playTone(ctx, 1046.5, now + 0.5, 0.6, 0.35)
-  playTone(ctx, 783.99, now + 1.2, 0.4, 0.3)
-  playTone(ctx, 1046.5, now + 1.4, 0.8, 0.35)
+const getContext = (): AudioContext | null => {
+  if (sharedCtx) return sharedCtx
+  try {
+    sharedCtx = new AudioContext()
+    return sharedCtx
+  } catch {
+    return null
+  }
+}
+
+export const playCompletionSound = () => {
+  try {
+    const ctx = getContext()
+    if (!ctx) return
+    if (ctx.state === 'suspended') void ctx.resume()
+    const now = ctx.currentTime
+
+    playTone(ctx, 523.25, now, 0.4, 0.4)
+    playTone(ctx, 659.25, now + 0.15, 0.4, 0.4)
+    playTone(ctx, 783.99, now + 0.3, 0.4, 0.4)
+    playTone(ctx, 1046.5, now + 0.5, 0.6, 0.35)
+    playTone(ctx, 783.99, now + 1.2, 0.4, 0.3)
+    playTone(ctx, 1046.5, now + 1.4, 0.8, 0.35)
+  } catch {
+    // El sonido es un extra: nunca debe romper el fin de sesión.
+  }
 }

@@ -1,0 +1,53 @@
+## MODIFIED Requirements
+
+### Requirement: Registro de día activo
+
+El sistema SHALL definir una meta diaria fija de 5 pomodoros de Enfoque. Cuando una sesión de Enfoque se completa, el sistema SHALL incrementar el conteo de sesiones del día calendario local correspondiente. Un día SHALL considerarse activo para la racha únicamente cuando su conteo alcanza la meta diaria (5). Los descansos NO SHALL contar como sesiones. Alcanzar la meta SHALL actualizar la racha como máximo una vez por día; las sesiones adicionales tras alcanzar la meta NO SHALL alterar la racha.
+
+#### Scenario: Primer pomodoro del día
+
+- **WHEN** el usuario completa el primer pomodoro de Enfoque de un día
+- **THEN** el conteo de sesiones del día se incrementa pero, al estar por debajo de la meta, el día no se marca como activo y la racha no cambia
+
+#### Scenario: Pomodoro adicional el mismo día
+
+- **WHEN** el usuario completa otro pomodoro de Enfoque el mismo día sin haber alcanzado aún la meta
+- **THEN** el conteo del día se incrementa y la racha permanece sin cambios
+
+#### Scenario: Se alcanza la meta diaria
+
+- **WHEN** el usuario completa el quinto pomodoro de Enfoque de un día
+- **THEN** el día se marca como activo y la racha actual se actualiza según la continuidad con el día activo anterior
+
+#### Scenario: Sesiones adicionales tras la meta
+
+- **WHEN** el usuario completa un sexto o posterior pomodoro de Enfoque el mismo día ya cumplido
+- **THEN** la racha actual no cambia y el día permanece marcado como activo
+
+#### Scenario: Descanso completado
+
+- **WHEN** una sesión de Descanso finaliza
+- **THEN** no se incrementa el conteo de ningún día ni se altera la racha
+
+### Requirement: Vista de la semana actual
+
+El sistema SHALL mostrar los siete días de la semana en curso, de lunes a domingo, indicando para cada uno si alcanzó la meta diaria y cuál corresponde al día de hoy.
+
+#### Scenario: Días de la semana marcados
+
+- **WHEN** el usuario visualiza la vista semanal
+- **THEN** cada día que alcanzó la meta de 5 sesiones esa semana aparece marcado como cumplido, el día actual se distingue de los demás y los días que no alcanzaron la meta aparecen sin marcar
+
+### Requirement: Presentación de la tarjeta de racha
+
+El sistema SHALL presentar una tarjeta de racha dentro del panel de Historial de Sesiones que muestre la racha actual con un indicador visual de racha, la vista de los días de la semana y el progreso del día en curso hacia la meta diaria. Los textos SHALL respetar el idioma seleccionado (español o inglés).
+
+#### Scenario: Ver la racha en el historial
+
+- **WHEN** el usuario abre el panel de Historial de Sesiones
+- **THEN** ve la tarjeta de racha con el contador de racha actual, la fila de días de la semana y el progreso del día hacia la meta (por ejemplo, sesiones completadas hoy sobre la meta), en el idioma activo
+
+#### Scenario: Progreso del día en curso
+
+- **WHEN** el usuario ha completado algunas sesiones hoy pero aún no alcanza la meta
+- **THEN** la tarjeta indica cuántas sesiones lleva respecto a la meta diaria

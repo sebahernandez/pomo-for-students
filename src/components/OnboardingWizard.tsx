@@ -72,7 +72,10 @@ const wizardContent = {
 }
 
 export function OnboardingWizard() {
-  const { language, darkMode, toggleDarkMode, setLanguage } = useAppStore()
+  const language = useAppStore((s) => s.language)
+  const darkMode = useAppStore((s) => s.darkMode)
+  const toggleDarkMode = useAppStore((s) => s.toggleDarkMode)
+  const setLanguage = useAppStore((s) => s.setLanguage)
   const [isOpen, setIsOpen] = useState(() => !localStorage.getItem(ONBOARDED_KEY))
   const [step, setStep] = useState(0)
 

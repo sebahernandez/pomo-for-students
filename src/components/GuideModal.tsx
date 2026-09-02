@@ -8,7 +8,7 @@ interface GuideModalProps {
 }
 
 export function GuideModal({ onClose }: GuideModalProps) {
-  const { language } = useAppStore()
+  const language = useAppStore((s) => s.language)
   const t = useTranslations(language)
 
   const steps = language === 'es' ? [

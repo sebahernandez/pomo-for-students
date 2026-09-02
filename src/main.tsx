@@ -8,10 +8,12 @@ import { OnboardingWizard } from './components/OnboardingWizard.tsx'
 import { CookieConsentBanner } from './components/CookieConsentBanner.tsx'
 import { GrainientBackground } from './components/GrainientBackground.tsx'
 import { DarkModeInit } from './components/DarkModeInit.tsx'
+import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 import { Analytics } from '@vercel/analytics/react'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ErrorBoundary>
     <DarkModeInit />
     <Analytics />
     <GrainientBackground />
@@ -24,5 +26,6 @@ createRoot(document.getElementById('root')!).render(
       </main>
       <Footer />
     </div>
+    </ErrorBoundary>
   </StrictMode>,
 )

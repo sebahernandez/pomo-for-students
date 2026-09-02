@@ -1,29 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { IconPlayerPlay, IconPlayerPause, IconRotate, IconTarget, IconClock } from '@tabler/icons-react'
 import { useAppStore } from '../context/AppContext'
 import { useTranslations } from '../i18n/translations'
-import { playCompletionSound } from '../lib/audio'
 import { useThemeColors } from '../hooks/useThemeColors'
 
 export function TimerCard() {
-  const {
-    timerMode,
-    timerStatus,
-    timeLeft,
-    breakTimeLeft,
-    sessionsCompleted,
-    activeTaskId,
-    tasks,
-    pauseTimer,
-    resetTimer,
-    toggleFocus,
-    setTimerMode,
-    setTimeLeft,
-    setBreakTimeLeft,
-    setTaskFocusTime,
-    language,
-    darkMode,
-  } = useAppStore()
+  const timerMode = useAppStore((s) => s.timerMode)
+  const timerStatus = useAppStore((s) => s.timerStatus)
+  const timeLeft = useAppStore((s) => s.timeLeft)
+  const breakTimeLeft = useAppStore((s) => s.breakTimeLeft)
+  const sessionsCompleted = useAppStore((s) => s.sessionsCompleted)
+  const activeTaskId = useAppStore((s) => s.activeTaskId)
+  const tasks = useAppStore((s) => s.tasks)
+  const pauseTimer = useAppStore((s) => s.pauseTimer)
+  const resetTimer = useAppStore((s) => s.resetTimer)
+  const toggleFocus = useAppStore((s) => s.toggleFocus)
+  const setTimerMode = useAppStore((s) => s.setTimerMode)
+  const setTimeLeft = useAppStore((s) => s.setTimeLeft)
+  const setBreakTimeLeft = useAppStore((s) => s.setBreakTimeLeft)
+  const setTaskFocusTime = useAppStore((s) => s.setTaskFocusTime)
+  const settings = useAppStore((s) => s.settings)
+  const language = useAppStore((s) => s.language)
+  const darkMode = useAppStore((s) => s.darkMode)
 
   const themeColors = useThemeColors()
   const t = useTranslations(language)
@@ -49,7 +47,6 @@ export function TimerCard() {
   // El modo Enfoque queda subordinado a la tarjeta Kanban activa: sin ella no puede correr.
   // Los descansos siguen siendo libres.
   const focusLocked = timerMode === 'work' && !activeTask
-  const settings = useAppStore.getState().settings
   // Duración total de la sesión actual según el modo: en descanso, la del descanso;
   // en Enfoque, la de la tarea activa (o la duración de enfoque por defecto).
   const totalSeconds = isBreak
@@ -94,35 +91,8 @@ export function TimerCard() {
     if (e.key === 'Escape') setIsEditing(false)
   }
 
-  useEffect(() => {
-    if (timerStatus !== 'running') return
-
-    // La cuenta y la detección de fin dependen del modo: Enfoque usa timeLeft
-    // (y persiste en la tarea); los descansos usan su cuenta propia sin tocar tareas.
-    if (shownTime === 0) {
-       playCompletionSound()
-
-      if (timerMode === 'work') {
-        useAppStore.getState().incrementSessions()
-        setTimerMode('break')
-      } else {
-        setTimerMode('work')
-      }
-      return
-    }
-
-    const id = setInterval(() => {
-      if (timerMode === 'work') {
-        useAppStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }))
-        useAppStore.getState().saveTaskTime()
-      } else {
-        useAppStore.setState((state) => ({ breakTimeLeft: state.breakTimeLeft - 1 }))
-      }
-    }, 1000)
-
-    return () => clearInterval(id)
-  }, [timerStatus, shownTime, timerMode, setTimerMode])
-
+  // La cuenta regresiva y la detección de fin viven en useTimerEngine (montado
+  // en App); esta tarjeta solo muestra el estado y despacha acciones.
 
   return (
     <div 
@@ -132,14 +102,16 @@ export function TimerCard() {
       }}
     >
       <div className="p-6">
-        <div className="flex justify-center gap-2 mb-4" role="tablist">
+        <div className="flex justify-center gap-2 mb-4" role="tablist" aria-label={`${t.focus} / ${t.break}`}>
           {modes.map((mode) => {
             const isActive = timerMode === mode.key
             return (
               <button
                 key={mode.key}
+                id={`tab-${mode.key}`}
                 role="tab"
                 aria-selected={isActive}
+                aria-controls="timer-panel"
                 onClick={() => setTimerMode(mode.key)}
                 className="px-3 py-1.5 rounded-xl text-sm font-medium transition-all duration-300"
                 style={
@@ -157,6 +129,7 @@ export function TimerCard() {
           })}
         </div>
 
+        <div role="tabpanel" id="timer-panel" aria-labelledby={`tab-${timerMode}`}>
         <div className="text-center mb-4 h-6 flex items-center justify-center">
           {activeTask && (
             <span className="tag-accent animate-fade-in">
@@ -266,6 +239,7 @@ export function TimerCard() {
               <IconTarget size={12} /> {t.selectTaskToStart}
             </span>
           )}
+        </div>
         </div>
       </div>
     </div>

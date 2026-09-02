@@ -1,8 +1,10 @@
 import { TimerCard } from './components/TimerCard'
 import { KanbanBoard } from './components/KanbanBoard'
 import { FinishTaskPrompt } from './components/FinishTaskPrompt'
+import { useTimerEngine } from './hooks/useTimerEngine'
 
 function App() {
+  useTimerEngine()
   return (
     <div className="container mx-auto max-w-7xl px-2 lg:px-0 py-6 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] space-y-6">
       <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">

@@ -13,7 +13,10 @@ export function Header() {
   const [historyOpen, setHistoryOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const { darkMode, toggleDarkMode, language, setLanguage } = useAppStore()
+  const darkMode = useAppStore((s) => s.darkMode)
+  const toggleDarkMode = useAppStore((s) => s.toggleDarkMode)
+  const language = useAppStore((s) => s.language)
+  const setLanguage = useAppStore((s) => s.setLanguage)
   const t = useTranslations(language)
 
   const toggleLang = () => {

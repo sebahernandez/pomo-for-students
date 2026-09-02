@@ -18,7 +18,7 @@ function getCookie(name: string): string | null {
 const COOKIE_CONSENT_KEY = 'pomo-cookie-consent'
 
 export function CookieConsentBanner() {
-  const { language } = useAppStore()
+  const language = useAppStore((s) => s.language)
   const [isVisible, setIsVisible] = useState(() => !getCookie(COOKIE_CONSENT_KEY))
 
   const handleAccept = () => {

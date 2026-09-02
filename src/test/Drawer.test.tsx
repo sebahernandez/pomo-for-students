@@ -21,7 +21,7 @@ describe('Drawer', () => {
     const onClose = vi.fn()
     render(<Drawer onClose={onClose} title="P"><p>x</p></Drawer>)
 
-    await user.click(screen.getByRole('button', { name: /close/i }))
+    await user.click(screen.getByRole('button', { name: /close|cerrar/i }))
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
@@ -149,7 +149,7 @@ describe('Panels presented as drawers', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/cambios sin guardar/i)
 
     // The X close button is likewise guarded.
-    await user.click(screen.getByRole('button', { name: /close/i }))
+    await user.click(screen.getByRole('button', { name: /close|cerrar/i }))
     expect(onClose).not.toHaveBeenCalled()
 
     // The scrim is likewise guarded.
@@ -234,7 +234,9 @@ describe('Panels presented as drawers', () => {
     render(<SessionHistory onClose={onClose} />)
 
     expect(screen.getByRole('dialog', { name: 'Historial de Sesiones' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: /close/i }))
+    // Con el aria-label traducido, la X y el botón del pie comparten nombre
+    // accesible ("Cerrar"); ambos cierran el panel.
+    await user.click(screen.getAllByRole('button', { name: /close|cerrar/i })[0])
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
